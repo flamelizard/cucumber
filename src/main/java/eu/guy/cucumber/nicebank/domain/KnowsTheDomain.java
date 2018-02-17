@@ -1,4 +1,4 @@
-package eu.guy.cucumber.nicebank.support;
+package eu.guy.cucumber.nicebank.domain;
 
 /**
  * Created by Tom on 2/14/2018.

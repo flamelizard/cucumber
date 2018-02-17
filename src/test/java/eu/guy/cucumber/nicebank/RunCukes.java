@@ -20,3 +20,5 @@ classpath by maven, else copy explicitly with maven
         dryRun = false)
 public class RunCukes {
 }
+
+// NEXT UP - done meet-greet DI

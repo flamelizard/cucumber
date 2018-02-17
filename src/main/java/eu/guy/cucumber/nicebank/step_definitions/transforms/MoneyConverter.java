@@ -1,7 +1,7 @@
 package eu.guy.cucumber.nicebank.step_definitions.transforms;
 
 import cucumber.api.Transformer;
-import eu.guy.cucumber.nicebank.support.Money;
+import eu.guy.cucumber.nicebank.domain.Money;
 
 /*
 Useful when you cannot change class implementation that would let Cucumber
