@@ -1,0 +1,43 @@
+<html>
+<head>
+    <title>Nice Bank ATM</title>
+</head>
+<body>
+<h1>Welcome to our nice bank!</h1>
+<div>
+    <form action="/withdraw" method="POST">
+        <fieldset>
+            <legend>Money-O-Mat</legend>
+            <input type="radio" name="amount" value="10">10<br>
+            <input type="radio" name="amount" value="50" checked> 50<br>
+            <input type="radio" name="amount" value="100"> 100<br>
+            <input type="radio" name="amount" value="1000000"> 1000000<br>
+            <input type="submit" value="Withdraw" id="withdraw">
+        </fieldset>
+    </form>
+
+    <div>
+        <fieldset>
+            <legend>Account Balance</legend>
+            <button type="button" onclick="fireAjax()" id="btn-balance">Show
+                balance
+            </button>
+            <div id="balance-box"></div>
+        </fieldset>
+    </div>
+</div>
+<script>
+function fireAjax() {
+    req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            document.getElementById("balance-box").innerHTML = this.responseText;
+        }
+    }
+    req.open("GET", "/balance");
+    req.send();
+}
+
+</script>
+</body>
+</html>

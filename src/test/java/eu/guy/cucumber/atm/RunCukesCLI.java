@@ -1,18 +1,15 @@
-package eu.guy.cucumber.nicebank;
+package eu.guy.cucumber.atm;
 
 import cucumber.api.cli.Main;
 import org.junit.Test;
 
 import java.nio.file.Paths;
 
-/**
- * Created by Tom on 11/15/2017.
- */
 public class RunCukesCLI {
     public static String FEATURE_ROOT = "D:\\projects\\cucumber\\src\\main\\" +
-            "java\\eu\\guy\\cucumber\\nicebank\\features";
-    private String stepDefinitions = "eu.guy.cucumber.nicebank.step_definitions";
-    private String FEATURE = "atm.feature";
+            "java\\eu\\guy\\cucumber\\atm\\features";
+    private String stepDefinitions = "eu.guy.cucumber.atm.step_definitions";
+    private String FEATURE = "withdrawal.feature";
 
     @Test
     public void cucumberCLITest() throws Throwable {
