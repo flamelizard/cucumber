@@ -8,6 +8,8 @@ public class StandardTeller implements Teller {
     }
 
     public void withdrawFrom(Account account, Money amount) {
-        if (account.debit(amount)) cashSlot.dispense(amount);
+        account.debit(amount);
+//        TODO - dispense should occur after transaction
+        cashSlot.dispense(amount);
     }
 }

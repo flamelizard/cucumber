@@ -1,27 +1,30 @@
 package eu.guy.cucumber.atm.domain;
 
-public class Account {
+import eu.guy.cucumber.atm.transactions.BalanceStore;
+import eu.guy.cucumber.atm.transactions.TransactionQueue;
 
-    private Money balance;
+import java.io.FileNotFoundException;
+
+public class Account {
+    private TransactionQueue queue = new TransactionQueue();
 
     public Account() {
-        balance = new Money(0, 0);
     }
 
     public void credit(Money money) {
-        balance.add(money);
+        queue.write("+" + money.getAmount().toString());
+    }
+
+    public void debit(Money money) {
+        queue.write("-" + money.getAmount().toString());
     }
 
     public Money getBalance() {
-        return balance;
-    }
-
-    public boolean debit(Money money) {
         try {
-            getBalance().subtract(money);
-        } catch (BusinessException e) {
-            return false;
+            return BalanceStore.getBalance();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
-        return true;
     }
 }

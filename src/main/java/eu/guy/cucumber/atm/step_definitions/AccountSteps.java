@@ -26,7 +26,7 @@ public class AccountSteps {
 
     @Given("^[Mm]y account has been credited with (\\$\\d+(?:\\.\\d+)?)$")
     public void iHaveCredited$InMyAccount(
-            @Transform(MoneyConverter.class) Money money) {
+            @Transform(MoneyConverter.class) Money money) throws Exception {
         helper.getMyAccount().credit(money);
     }
 
