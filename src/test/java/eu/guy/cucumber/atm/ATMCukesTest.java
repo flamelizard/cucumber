@@ -16,10 +16,10 @@ Cucumber report goes to out/index.html for html:out
  */
 
 // Run as JUnit test through Cucumber runner
-// tags = "@debug" to target specific feature / scenario
+// tags = "@debug" / "~@tagToIgnore" to target specific feature / scenario
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = {"pretty", "html:out"}, snippets = SnippetType.CAMELCASE,
-        dryRun = false)
-public class RunCukes {
+        dryRun = false, tags = "@jenkins")
+public class ATMCukesTest {
 }

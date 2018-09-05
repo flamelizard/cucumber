@@ -1,5 +1,4 @@
 @atm-web
-@debug
 Feature: Account balance
 
   Scenario: User can check its account balance

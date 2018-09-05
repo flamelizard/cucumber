@@ -23,7 +23,9 @@ public class BalanceStore {
 
     public static Money getBalance() throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(BALANCE_FILE));
-        return Money.convert(scanner.nextLine());
+        if (scanner.hasNextLine())
+            return Money.convert(scanner.nextLine());
+        return new Money(0, 0);
     }
 
     public static void setBalance(Money money) throws FileNotFoundException {

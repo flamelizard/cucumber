@@ -6,6 +6,11 @@ import cucumber.api.java.en.Then;
 import eu.guy.cucumber.atm.domain.KnowsTheDomain;
 import eu.guy.cucumber.atm.domain.Money;
 import eu.guy.cucumber.atm.step_definitions.transforms.MoneyConverter;
+import eu.guy.cucumber.atm.transactions.BalanceStore;
+import eu.guy.cucumber.atm.utils.Utils;
+
+import java.io.FileNotFoundException;
+import java.time.Duration;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,9 +35,30 @@ public class AccountSteps {
         helper.getMyAccount().credit(money);
     }
 
+    //    handle asynchronous transactions processing
+    public static void waitForBalanceNoErr(Money expected) {
+        Money balance;
+        Duration duration = Duration.ofSeconds(5);
+        while (!duration.isNegative()) {
+            try {
+                balance = BalanceStore.getBalance();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+//                do not raise error
+                return;
+            }
+            if (balance.equals(expected)) {
+                return;
+            }
+            Utils.sleep(1);
+            duration = duration.minusSeconds(1);
+        }
+    }
+
     @Then("^the balance of my account should be (\\$[\\d.]+)$")
-    public void theBalanceOfMyAccountShouldBe$(
+    public void theBalanceOfMyAccountShouldBe(
             @Transform(MoneyConverter.class) Money money) {
+        waitForBalanceNoErr(money);
         assertEquals(helper.getMyAccount().getBalance(), money);
     }
 }

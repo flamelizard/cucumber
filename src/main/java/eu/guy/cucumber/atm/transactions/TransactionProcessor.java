@@ -19,8 +19,7 @@ public class TransactionProcessor {
     }
 
     //    Carry out transactions written to queue
-    private static void processQueue() throws
-            FileNotFoundException, BusinessException {
+    private static void processQueue() throws FileNotFoundException {
         String message, trnType;
         Money trnAmount, balance;
         Instruction inst;
@@ -42,7 +41,12 @@ public class TransactionProcessor {
                     balance.add(trnAmount);
                     break;
                 case "-":
-                    balance.subtract(trnAmount);
+                    try {
+                        balance.subtract(trnAmount);
+                    } catch (BusinessException ex) {
+                        log.debug(ex.getMessage());
+                        continue;
+                    }
                     break;
                 default:
                     log.error("Unknown type of transaction");
@@ -56,7 +60,7 @@ public class TransactionProcessor {
         Thread daemon = new Thread(() -> {
             try {
                 TransactionProcessor.processQueue();
-            } catch (FileNotFoundException | BusinessException e) {
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         });

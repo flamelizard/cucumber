@@ -2,6 +2,7 @@
 @atm-web
 Feature: Cash Withdrawal
 
+  @jenkins
   Scenario: Successful withdrawal from an account
     Given my account has been credited with $500
     When I withdraw $100

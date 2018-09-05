@@ -3,7 +3,6 @@ package eu.guy.cucumber.atm.domain;
 import eu.guy.cucumber.atm.transactions.BalanceStore;
 import eu.guy.cucumber.atm.transactions.TransactionProcessor;
 import eu.guy.cucumber.atm.transactions.TransactionQueue;
-import eu.guy.cucumber.atm.utils.Utils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,6 +11,7 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 
+import static eu.guy.cucumber.atm.step_definitions.AccountSteps.waitForBalanceNoErr;
 import static org.junit.Assert.assertEquals;
 
 public class TransactionProcessorTest {
@@ -38,9 +38,10 @@ public class TransactionProcessorTest {
 
     @Test
     public void canProcessCreditTrans() throws Exception {
-        account.credit(new Money(100, 0));
-        Utils.sleep(2);
-        assertEquals(new Money(100, 0), account.getBalance());
+        Money money = new Money(100, 0);
+        account.credit(money);
+        waitForBalanceNoErr(money);
+        assertEquals(money, account.getBalance());
     }
 
     @Test
@@ -48,8 +49,7 @@ public class TransactionProcessorTest {
         account.credit(new Money(200, 0));
         account.debit(new Money(50, 0));
         account.debit(new Money(5, 0));
-
-        Utils.sleep(5);
+        waitForBalanceNoErr(new Money(145, 0));
 
         assertEquals(new Money(145, 0), account.getBalance());
     }
