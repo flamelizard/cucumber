@@ -10,46 +10,47 @@ import java.util.Scanner;
 public class TransactionQueue {
     private static String MESSAGE_DIR = ".\\messages";
     private static String MESSAGE_FMT = "%s\\%03d";
-    private Integer nextId = 1;
+    private static Integer nextTrnId = 1;
 
     public static void init() throws IOException {
         FileUtils.deleteDirectory(new File(MESSAGE_DIR));
         new File(MESSAGE_DIR).mkdirs();
     }
 
-    public void write(String instruction) {
+    public synchronized Integer write(String instruction) {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(String.format(
-                    MESSAGE_FMT, MESSAGE_DIR, nextId++), "UTF-8");
+                    MESSAGE_FMT, MESSAGE_DIR, nextTrnId), "UTF-8");
         } catch (UnsupportedEncodingException | FileNotFoundException e) {
             e.printStackTrace();
-            return;
+            return -1;
         }
         writer.println(instruction);
         writer.close();
+        return nextTrnId++;
     }
 
-    public String read() {
-        String message = null;
+    //    thread-safe for TransactionProcessor
+    public synchronized Instruction read() {
+        Instruction inst = null;
         File[] transactions = new File(MESSAGE_DIR).listFiles();
         if (transactions == null || transactions.length == 0)
-            return message;
+            return inst;
         Arrays.sort(transactions, new byTransactionID());
 
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(transactions[0]);
+        Integer trnId = Integer.valueOf(transactions[0].getName());
+        try (Scanner scanner = new Scanner(transactions[0])) {
+            if (scanner.hasNextLine())
+                inst = new Instruction(scanner.nextLine(), trnId);
         } catch (FileNotFoundException e) {
-            System.out.println("Error: Cannot read transaction file: " +
-                    transactions[0]);
-            return message;
+//            TODO replace all prints with sensible logging
+            System.out.println(
+                    "Error: Cannot read transaction file: " + transactions[0]);
+            return inst;
         }
-        if (scanner.hasNextLine())
-            message = scanner.nextLine();
-        scanner.close();
         transactions[0].delete();
-        return message;
+        return inst;
     }
 
     class byTransactionID implements Comparator<File> {

@@ -3,23 +3,36 @@ package eu.guy.cucumber.atm.domain;
 import eu.guy.cucumber.atm.transactions.BalanceStore;
 import eu.guy.cucumber.atm.transactions.TransactionProcessor;
 import eu.guy.cucumber.atm.transactions.TransactionQueue;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import eu.guy.cucumber.atm.transactions.events.EventLogger;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static eu.guy.cucumber.atm.step_definitions.AccountSteps.waitForBalanceNoErr;
 import static org.junit.Assert.assertEquals;
 
+// TODO intermittent error to read log file due to threads race condition
 public class TransactionProcessorTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     private KnowsTheDomain domain;
     private Account account;
-    private Thread processor;
+    private static Thread processor;
+
+    @BeforeClass
+    public static void runTransactionDaemon() {
+        processor = TransactionProcessor.getProcessQueueThreaded();
+        processor.start();
+    }
+
+    @AfterClass
+    public static void stopDaemon() {
+        processor.interrupt();
+    }
 
     @Before
     public void setup() throws IOException {
@@ -27,17 +40,10 @@ public class TransactionProcessorTest {
         BalanceStore.init();
         domain = new KnowsTheDomain();
         account = domain.getMyAccount();
-        processor = TransactionProcessor.getProcessQueueThreaded();
-        processor.start();
-    }
-
-    @After
-    public void teardown() {
-        processor.interrupt();
     }
 
     @Test
-    public void canProcessCreditTrans() throws Exception {
+    public void canProcessCreditTrans() {
         Money money = new Money(100, 0);
         account.credit(money);
         waitForBalanceNoErr(money);
@@ -45,7 +51,7 @@ public class TransactionProcessorTest {
     }
 
     @Test
-    public void canProcessMultipleTransactions() throws Exception {
+    public void canProcessMultipleTransactions() {
         account.credit(new Money(200, 0));
         account.debit(new Money(50, 0));
         account.debit(new Money(5, 0));
@@ -54,13 +60,14 @@ public class TransactionProcessorTest {
         assertEquals(new Money(145, 0), account.getBalance());
     }
 
-//    TODO cannot leak exception from a thread. Workaround it.
-//    @Test
-//    public void preventDebitGreaterThanBalance() throws Exception {
-//        account.debit(new Money(999, 99));
-//
-//        thrown.expect(BusinessException.class);
-//        TransactionProcessor.processQueue();
-//    }
+    @Test
+    public void preventDebitGreaterThanBalance() {
+        account.credit(new Money(1, 0));
+        Integer trnId = account.debit(new Money(999, 99));
 
+        Map<String, String> event = EventLogger.waitForEvent(trnId, 5);
+
+        Optional<Map<String, String>> opt = Optional.ofNullable(event);
+        assertEquals("failure", opt.orElse(new HashMap<>()).get("type"));
+    }
 }

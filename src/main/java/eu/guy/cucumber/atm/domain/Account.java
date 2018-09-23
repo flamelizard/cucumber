@@ -11,12 +11,12 @@ public class Account {
     public Account() {
     }
 
-    public void credit(Money money) {
-        queue.write("+" + money.getAmount().toString());
+    public Integer credit(Money money) {
+        return queue.write("+" + money.getAmount().toString());
     }
 
-    public void debit(Money money) {
-        queue.write("-" + money.getAmount().toString());
+    public Integer debit(Money money) {
+        return queue.write("-" + money.getAmount().toString());
     }
 
     public Money getBalance() {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp" packages="">
+
+    <Appenders>
+        <File name="eventLog" fileName="logs/events.log" append="false">
+            <PatternLayout>
+                <Pattern>%d{yyyyMMddHHmmss} %-5p %c{1}:%L - %m%n</Pattern>
+            </PatternLayout>
+        </File>
+
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5p %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- respects logger hierarchy, full class name as logger name -->
+        <!-- additivity will prevent duplicate log messsages -->
+        <Logger name="eu.guy.cucumber.atm.transactions" additivity="false">
+            <AppenderRef ref="eventLog"/>
+        </Logger>
+
+        <!-- mandatory root logger -->
+        <Root level="all">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>

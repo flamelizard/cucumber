@@ -20,6 +20,6 @@ Cucumber report goes to out/index.html for html:out
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = {"pretty", "html:out"}, snippets = SnippetType.CAMELCASE,
-        dryRun = false, tags = "@jenkins")
+        dryRun = false)
 public class ATMCukesTest {
 }

@@ -1,6 +1,5 @@
 package eu.guy.cucumber.atm.domain;
 
-// remade class with added unit tests
 public class Money {
     public static int CENTPERDOLLAR = 100;
     private int dollar;
