@@ -24,7 +24,6 @@ public class AccountSteps {
 
         One injected instance per Scenario
     */
-// TODO replace outdated pico with Spring Boot DI, common config
     public AccountSteps(KnowsTheDomain helper) {
         this.helper = helper;
     }
@@ -36,7 +35,7 @@ public class AccountSteps {
     }
 
     //    handle asynchronous transactions processing
-    public static void waitForBalanceNoErr(Money expected) {
+    public static void waitForBalance(Money expected) {
         Money balance;
         Duration duration = Duration.ofSeconds(5);
         while (!duration.isNegative()) {
@@ -58,7 +57,7 @@ public class AccountSteps {
     @Then("^the balance of my account should be (\\$[\\d.]+)$")
     public void theBalanceOfMyAccountShouldBe(
             @Transform(MoneyConverter.class) Money money) {
-        waitForBalanceNoErr(money);
+        waitForBalance(money);
         assertEquals(helper.getMyAccount().getBalance(), money);
     }
 }

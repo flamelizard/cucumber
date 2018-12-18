@@ -2,7 +2,8 @@
 <Configuration status="warn" name="MyApp" packages="">
 
     <Appenders>
-        <File name="eventLog" fileName="logs/events.log" append="false">
+        <!--pass in as java system variable-->
+        <File name="eventLog" fileName="${sys:LOGFILE}" append="false">
             <PatternLayout>
                 <Pattern>%d{yyyyMMddHHmmss} %-5p %c{1}:%L - %m%n</Pattern>
             </PatternLayout>

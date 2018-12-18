@@ -19,7 +19,7 @@ The test waits for a specific event to occur and then checks the assumption.
 Obviously, event-driven testing needs to have a support built-in the program.
  */
 public class EventLogger {
-    private static String LOGFILE = "D:\\projects\\cucumber\\logs\\events.log";
+    private static String LOGFILE = System.getProperty("LOGFILE");
     private static Logger log = LogManager.getLogger(EventLogger.class);
 
     //    log to an event log file

@@ -15,6 +15,7 @@ classpath by maven, else copy explicitly with maven / ant
 Cucumber report goes to out/index.html for html:out
  */
 
+// TODO run from TestNG or JUnit to parametrize browser
 // Run as JUnit test through Cucumber runner
 // tags = "@debug" / "~@tagToIgnore" to target specific feature / scenario
 @RunWith(Cucumber.class)

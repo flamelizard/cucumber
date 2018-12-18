@@ -12,14 +12,6 @@ public class WebTeller implements Teller {
         goToMain();
     }
 
-    public static void sleep(int sec) {
-        try {
-            Thread.sleep(sec * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void goToMain() {
         webDriver.get("http://localhost:" + ServiceHooks.WEBPORT);
     }
@@ -31,10 +23,6 @@ public class WebTeller implements Teller {
                 "//input[@value='%d']", money.getAmount().intValue());
         webDriver.findElement(By.xpath(xpath)).click();
         webDriver.findElement(By.id("withdraw")).click();
-    }
-
-    public String getCurrentScreenHtml() {
-        return webDriver.getPageSource();
     }
 
     public boolean accountHasInsufficientFunds() {

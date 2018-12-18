@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static eu.guy.cucumber.atm.step_definitions.AccountSteps.waitForBalanceNoErr;
+import static eu.guy.cucumber.atm.step_definitions.AccountSteps.waitForBalance;
 import static org.junit.Assert.assertEquals;
 
 // TODO intermittent error to read log file due to threads race condition
@@ -46,7 +46,7 @@ public class TransactionProcessorTest {
     public void canProcessCreditTrans() {
         Money money = new Money(100, 0);
         account.credit(money);
-        waitForBalanceNoErr(money);
+        waitForBalance(money);
         assertEquals(money, account.getBalance());
     }
 
@@ -55,7 +55,7 @@ public class TransactionProcessorTest {
         account.credit(new Money(200, 0));
         account.debit(new Money(50, 0));
         account.debit(new Money(5, 0));
-        waitForBalanceNoErr(new Money(145, 0));
+        waitForBalance(new Money(145, 0));
 
         assertEquals(new Money(145, 0), account.getBalance());
     }

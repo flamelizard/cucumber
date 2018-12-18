@@ -11,6 +11,7 @@ import java.io.IOException;
 public class TransactionHooks {
     private Thread processor;
 
+    //    before each scenario
     @Before
     public void cleanUp() throws IOException {
         System.out.println("Transaction hooks ... ");

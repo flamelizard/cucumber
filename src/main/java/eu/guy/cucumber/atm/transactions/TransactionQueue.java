@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
 
+/*
+Very simple file-based queue
+Every transaction creates a file. Consuming trans will delete the file.
+ */
 public class TransactionQueue {
     private static String MESSAGE_DIR = ".\\messages";
     private static String MESSAGE_FMT = "%s\\%03d";

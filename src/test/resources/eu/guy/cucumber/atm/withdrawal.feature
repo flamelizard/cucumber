@@ -1,4 +1,4 @@
-# Cucumber custom hook to start jetty http server
+# Start atm web interface instead of regular
 @atm-web
 Feature: Cash Withdrawal
 

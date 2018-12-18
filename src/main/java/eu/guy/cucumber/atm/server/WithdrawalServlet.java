@@ -2,7 +2,6 @@ package eu.guy.cucumber.atm.server;
 
 import eu.guy.cucumber.atm.domain.*;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ public class WithdrawalServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws IOException {
 //        value from form -> <input name="amount"
         String amount = req.getParameter("amount");
         Teller teller = new StandardTeller(cashSlot);
