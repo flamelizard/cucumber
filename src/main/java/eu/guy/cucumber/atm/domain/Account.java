@@ -1,30 +1,32 @@
 package eu.guy.cucumber.atm.domain;
 
-import eu.guy.cucumber.atm.transactions.BalanceStore;
 import eu.guy.cucumber.atm.transactions.TransactionQueue;
+import org.javalite.activejdbc.Model;
 
-import java.io.FileNotFoundException;
-
-public class Account {
+public class Account extends Model {
     private TransactionQueue queue = new TransactionQueue();
 
-    public Account() {
-    }
-
     public Integer credit(Money money) {
-        return queue.write("+" + money.getAmount().toString());
+        return queue.write("+" + money.getAmount().toString() +
+                "," + getAccountNum());
     }
 
     public Integer debit(Money money) {
-        return queue.write("-" + money.getAmount().toString());
+        return queue.write("-" + money.getAmount().toString() +
+                "," + getAccountNum());
     }
 
     public Money getBalance() {
-        try {
-            return BalanceStore.getBalance();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return Money.convert(getString("balance"));
+    }
+
+    public void setBalance(Money amount) {
+//        operates directly on db managed by activeJDBC
+        setString("balance", amount.getAmount());
+        saveIt();
+    }
+
+    private Integer getAccountNum() {
+        return getInteger("number");
     }
 }
