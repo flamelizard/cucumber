@@ -21,7 +21,7 @@ public class TransactionQueue {
         new File(MESSAGE_DIR).mkdirs();
     }
 
-    public synchronized Integer write(String instruction) {
+    public synchronized Integer write(Instruction inst) {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(String.format(
@@ -30,7 +30,7 @@ public class TransactionQueue {
             e.printStackTrace();
             return -1;
         }
-        writer.println(instruction);
+        writer.println(inst.toTransfer());
         writer.close();
         return nextTrnId++;
     }
@@ -46,7 +46,7 @@ public class TransactionQueue {
         Integer trnId = Integer.valueOf(transactions[0].getName());
         try (Scanner scanner = new Scanner(transactions[0])) {
             if (scanner.hasNextLine())
-                inst = new Instruction(scanner.nextLine(), trnId);
+                inst = Instruction.parseFrom(scanner.nextLine(), trnId);
         } catch (FileNotFoundException e) {
 //            TODO replace all prints with sensible logging
             System.out.println(

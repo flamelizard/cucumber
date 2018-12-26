@@ -3,8 +3,10 @@ package eu.guy.cucumber.atm.domain.hooks;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import eu.guy.cucumber.atm.domain.Account;
 import eu.guy.cucumber.atm.domain.KnowsTheDomain;
 import eu.guy.cucumber.atm.server.ATMServer;
+import eu.guy.cucumber.atm.server.DataStore;
 import org.openqa.selenium.OutputType;
 
 public class ServiceHooks {
@@ -20,7 +22,7 @@ public class ServiceHooks {
     @Before("@atm-web")
     public void startServer() throws Exception {
         System.out.println("Starting ATM Backend ... port " + WEBPORT);
-        server = new ATMServer(WEBPORT, helper.getCashSlot(), helper.getMyAccount());
+        server = new ATMServer(WEBPORT, helper.getCashSlot());
         server.start();
     }
 
@@ -36,5 +38,12 @@ public class ServiceHooks {
                 .getScreenshotAs(OutputType.BYTES);
         scenario.embed(screenshot, "image/png"); // save image
         helper.getWebDriver().close();
+    }
+
+    @Before
+    public void prepareDataStore() {
+        DataStore.createConnection();
+        System.out.println("Deleting all accounts...");
+        Account.deleteAll();
     }
 }

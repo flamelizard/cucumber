@@ -9,11 +9,9 @@ import java.io.IOException;
 
 public class WithdrawalServlet extends HttpServlet {
     private final CashSlot cashSlot;
-    private final Account account;
 
-    public WithdrawalServlet(CashSlot cashSlot, Account account) {
+    public WithdrawalServlet(CashSlot cashSlot) {
         this.cashSlot = cashSlot;
-        this.account = account;
     }
 
     @Override
@@ -21,6 +19,11 @@ public class WithdrawalServlet extends HttpServlet {
             throws IOException {
 //        value from form -> <input name="amount"
         String amount = req.getParameter("amount");
+        Integer accNumber = Integer.valueOf(req.getParameter("account"));
+
+        DataStore.createConnection();
+        Account account = Account.getAccount(accNumber);
+
         Teller teller = new StandardTeller(cashSlot);
         teller.withdrawFrom(account, Money.convert(amount));
 

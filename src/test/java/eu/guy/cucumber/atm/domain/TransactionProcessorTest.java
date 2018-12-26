@@ -1,6 +1,5 @@
 package eu.guy.cucumber.atm.domain;
 
-import eu.guy.cucumber.atm.transactions.BalanceStore;
 import eu.guy.cucumber.atm.transactions.TransactionProcessor;
 import eu.guy.cucumber.atm.transactions.TransactionQueue;
 import eu.guy.cucumber.atm.transactions.events.EventLogger;
@@ -17,11 +16,11 @@ import static org.junit.Assert.assertEquals;
 
 // TODO intermittent error to read log file due to threads race condition
 public class TransactionProcessorTest {
+    private static Thread processor;
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     private KnowsTheDomain domain;
     private Account account;
-    private static Thread processor;
 
     @BeforeClass
     public static void runTransactionDaemon() {
@@ -37,7 +36,6 @@ public class TransactionProcessorTest {
     @Before
     public void setup() throws IOException {
         TransactionQueue.init();
-        BalanceStore.init();
         domain = new KnowsTheDomain();
         account = domain.getMyAccount();
     }
@@ -46,7 +44,7 @@ public class TransactionProcessorTest {
     public void canProcessCreditTrans() {
         Money money = new Money(100, 0);
         account.credit(money);
-        waitForBalance(money);
+        waitForBalance(money, account);
         assertEquals(money, account.getBalance());
     }
 
@@ -55,7 +53,7 @@ public class TransactionProcessorTest {
         account.credit(new Money(200, 0));
         account.debit(new Money(50, 0));
         account.debit(new Money(5, 0));
-        waitForBalance(new Money(145, 0));
+        waitForBalance(new Money(145, 0), account);
 
         assertEquals(new Money(145, 0), account.getBalance());
     }

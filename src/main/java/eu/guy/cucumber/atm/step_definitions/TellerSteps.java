@@ -20,14 +20,14 @@ public class TellerSteps {
 
     @When("^I withdraw \\$([\\d.]+)$")
     public void iWithdraw$(
-            @Transform(MoneyConverter.class) Money amount) throws Throwable {
+            @Transform(MoneyConverter.class) Money amount) {
         helper.getTeller().withdrawFrom(helper.getMyAccount(), amount);
     }
 
     @When("^I check my balance")
     public void iCheckBalance() {
         WebTeller teller = (WebTeller) helper.getTeller();
-        teller.checkBalance();
+        teller.checkBalance(helper.getMyAccount());
     }
 
     @Then("^I should see that my balance is (\\$[\\d.]+)$")

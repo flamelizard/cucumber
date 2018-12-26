@@ -2,7 +2,6 @@ package eu.guy.cucumber.atm.domain.hooks;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import eu.guy.cucumber.atm.transactions.BalanceStore;
 import eu.guy.cucumber.atm.transactions.TransactionProcessor;
 import eu.guy.cucumber.atm.transactions.TransactionQueue;
 
@@ -16,7 +15,6 @@ public class TransactionHooks {
     public void cleanUp() throws IOException {
         System.out.println("Transaction hooks ... ");
         TransactionQueue.init();
-        BalanceStore.init();
     }
 
     @Before

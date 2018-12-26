@@ -34,7 +34,6 @@
                 <version>3.6.2</version>
                 <configuration>
                     <changeLogFile>src/main/resources/bank_schema.xml</changeLogFile>
-                    <driver>com.mysql.jdbc.Driver</driver>
                     <url>jdbc:mysql://localhost:3306/bank</url>
                     <username>teller</username>
                     <password>password</password>

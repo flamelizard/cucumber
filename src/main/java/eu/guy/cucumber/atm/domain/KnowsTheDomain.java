@@ -10,19 +10,20 @@ public class KnowsTheDomain {
     private CashSlot cashSlot;
     private Teller teller;
     private Browser browserFactory;
+    private Integer TEST_ACC_NUM = 100;
 
     public KnowsTheDomain() throws FileNotFoundException {
         browserFactory = new Browser();
     }
 
+    //    TODO have a test running transactions on multiple accounts
     public Account getMyAccount() {
 //    no stinking null instance var in test class, tough to debug problems later
         if (account == null)
-            account = new Account();
+            account = new Account(TEST_ACC_NUM);
         return account;
     }
 
-    //    TODO Spring to inject teller implementation
     public Teller getTeller() {
         if (teller == null) {
 //            teller = new StandardTeller(getCashSlot());

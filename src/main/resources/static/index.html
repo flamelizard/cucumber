@@ -5,39 +5,42 @@
 <body>
 <h1>Welcome to our nice bank!</h1>
 <div>
-    <form action="/withdraw" method="POST">
+    <form action="/withdraw" id="withdraw" method="POST">
         <fieldset>
             <legend>Money-O-Mat</legend>
+            <input name="account" placeholder="Account number" required style="display: block" type="number">
             <input type="radio" name="amount" value="10">10<br>
             <input type="radio" name="amount" value="50" checked> 50<br>
             <input type="radio" name="amount" value="100"> 100<br>
             <input type="radio" name="amount" value="1000000"> 1000000<br>
-            <input type="submit" value="Withdraw" id="withdraw">
+            <input id="btn-withdraw" type="submit" value="Withdraw">
         </fieldset>
     </form>
 
-    <div>
+    <!-- sending form via ajax for fun -->
+    <form action="/balance" id="balance" onsubmit="fireAjax(); return false;">
         <fieldset>
             <legend>Account Balance</legend>
-            <button type="button" onclick="fireAjax()" id="btn-balance">Show
-                balance
-            </button>
+            <input name="account" placeholder="Account number" required style="display: block" type="number">
+            <input id="btn-balance" type="submit" value="Show balance">
             <div id="balance-box"></div>
         </fieldset>
-    </div>
+    </form>
+
 </div>
 <script>
 function fireAjax() {
-    req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
-        if (this.readyState == 4) {
-            document.getElementById("balance-box").innerHTML = this.responseText;
-        }
-    }
-    req.open("GET", "/balance");
-    req.send();
-}
+    oForm = document.getElementById("balance"); //FormData API
 
+    req = new XMLHttpRequest();
+    req.onload = function() {
+        document.getElementById("balance-box").innerHTML = this.responseText;
+    }
+
+    req.send(new FormData(oForm));
+    let url = oForm.action;
+    req.open("GET", url);
+}
 </script>
 </body>
 </html>

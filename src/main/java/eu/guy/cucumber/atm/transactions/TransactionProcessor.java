@@ -1,16 +1,15 @@
 package eu.guy.cucumber.atm.transactions;
 
+import eu.guy.cucumber.atm.domain.Account;
 import eu.guy.cucumber.atm.domain.BusinessException;
 import eu.guy.cucumber.atm.domain.Money;
+import eu.guy.cucumber.atm.server.DataStore;
 import eu.guy.cucumber.atm.transactions.events.Event;
-
-import java.io.FileNotFoundException;
 
 import static eu.guy.cucumber.atm.transactions.events.EventLogger.logEvent;
 import static eu.guy.cucumber.atm.utils.Utils.sleep;
 
-// TODO change to full featured threaded class, disallow anyone to run looped
-// method
+// TODO turn to threaded class to prevent running processQueue directly
 public class TransactionProcessor {
     private static TransactionQueue queue = new TransactionQueue();
 
@@ -18,11 +17,11 @@ public class TransactionProcessor {
         TransactionProcessor.processQueue();
     }
 
-    private static void processQueue() throws
-            FileNotFoundException, BusinessException {
+    private static void processQueue() throws BusinessException {
         String trnType;
         Money trnAmount, balance;
         Instruction inst;
+        Account toAccount;
 
 //        !! Forever loop, should run in a thread
         while (true) {
@@ -33,7 +32,8 @@ public class TransactionProcessor {
             }
             trnType = inst.getType();
             trnAmount = Money.convert(inst.getAmount());
-            balance = BalanceStore.getBalance();
+            toAccount = Account.getAccount(inst.getAccNumber());
+            balance = toAccount.getBalance();
             switch (trnType) {
                 case "+":
                     balance.add(trnAmount);
@@ -52,7 +52,7 @@ public class TransactionProcessor {
                             .add("message", "Unknown type of transaction"));
                     return;
             }
-            BalanceStore.setBalance(balance);
+            toAccount.setBalance(balance);
             logEvent(new Event("transaction", inst.getId())
                     .add("trnType", trnType)
                     .add("trnAmount", trnAmount.toString()));
@@ -61,6 +61,7 @@ public class TransactionProcessor {
 
     public static Thread getProcessQueueThreaded() {
         return new Thread(() -> {
+            DataStore.createConnection();
             try {
                 TransactionProcessor.processQueue();
             } catch (Exception e) {
