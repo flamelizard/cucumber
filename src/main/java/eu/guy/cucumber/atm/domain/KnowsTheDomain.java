@@ -16,7 +16,6 @@ public class KnowsTheDomain {
         browserFactory = new Browser();
     }
 
-    //    TODO have a test running transactions on multiple accounts
     public Account getMyAccount() {
 //    no stinking null instance var in test class, tough to debug problems later
         if (account == null)

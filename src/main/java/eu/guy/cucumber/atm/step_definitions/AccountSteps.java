@@ -47,6 +47,20 @@ public class AccountSteps {
     }
 
     //    handle asynchronous transactions processing
+    public static void assertForBalance(Money expected, Account account) {
+        Money balance = new Money(0);
+        Duration duration = Duration.ofSeconds(5);
+        while (!duration.isNegative()) {
+            balance = account.getBalance();
+            if (balance.equals(expected)) {
+                break;
+            }
+            Utils.sleep(1);
+            duration = duration.minusSeconds(1);
+        }
+        assertEquals(expected, balance);
+    }
+
     @Then("^the balance of my account should be (\\$[\\d.]+)$")
     public void theBalanceOfMyAccountShouldBe(
             @Transform(MoneyConverter.class) Money money) {

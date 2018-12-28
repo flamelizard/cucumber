@@ -1,5 +1,6 @@
 package eu.guy.cucumber.atm.transactions.events;
 
+import eu.guy.cucumber.atm.AppSetup;
 import eu.guy.cucumber.atm.domain.BusinessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +20,7 @@ The test waits for a specific event to occur and then checks the assumption.
 Obviously, event-driven testing needs to have a support built-in the program.
  */
 public class EventLogger {
-    private static String LOGFILE = System.getProperty("LOGFILE");
+    private static String LOGFILE = AppSetup.getProjectProperty("event.log.file");
     private static Logger log = LogManager.getLogger(EventLogger.class);
 
     //    log to an event log file

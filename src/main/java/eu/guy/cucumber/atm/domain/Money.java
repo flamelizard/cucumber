@@ -11,6 +11,10 @@ public class Money {
         assert cents < CENTPERDOLLAR;
     }
 
+    public Money(int dollar) {
+        this(dollar, 0);
+    }
+
     //  e.g $1.5 = $1 + 50c
     public static Money convert(String amount) {
         if (amount == null || amount.equals("")) return null;
