@@ -5,3 +5,4 @@ ticktacktoe*
 *exe
 *.class
 \out
+\log

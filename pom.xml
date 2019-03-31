@@ -27,13 +27,51 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+            <!--standard maven plugin to execute a class running tests-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <classpathScope>test</classpathScope>
+                            <mainClass>cucumber.api.cli.Main</mainClass>
+                            <arguments>
+                                <argument>--plugin</argument>
+                                <argument>html:out</argument>
+                                <argument>--tags</argument>
+                                <argument>@debug</argument>
+                                <argument>--strict</argument>
+                                <argument>--glue</argument>
+                                <argument>eu.guy.cucumber.atm.step_definitions</argument>
+                                <argument>src\test\java\eu\guy\cucumber\atm\features</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!--manage db scheme changes, iterative development-->
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.6.2</version>
                 <configuration>
-                    <changeLogFile>src/main/resources/bank_schema.xml</changeLogFile>
+                    <changeLogFile>src/test/resources/bank_schema.xml</changeLogFile>
                     <url>jdbc:mysql://localhost:3306/bank</url>
                     <username>teller</username>
                     <password>password</password>
@@ -48,14 +86,15 @@
                 </executions>
             </plugin>
 
-            <!--init Model subclass representing table row in db-->
+            <!-- Class representing a table must be instrumented-->
             <plugin>
                 <groupId>org.javalite</groupId>
                 <artifactId>activejdbc-instrumentation</artifactId>
                 <version>2.2</version>
                 <executions>
                     <execution>
-                        <phase>process-classes</phase>
+                        <!--instrument after compiling test classes-->
+                        <phase>process-test-classes</phase>
                         <goals>
                             <goal>instrument</goal>
                         </goals>
