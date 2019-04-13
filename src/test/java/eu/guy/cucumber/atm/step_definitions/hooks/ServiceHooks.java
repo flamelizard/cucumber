@@ -7,17 +7,15 @@ import eu.guy.cucumber.atm.domain.CashSlot;
 import eu.guy.cucumber.atm.domain.WebTeller;
 import eu.guy.cucumber.atm.server.ATMServer;
 import org.openqa.selenium.OutputType;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ServiceHooks {
     public static int WEBPORT = 9988;
-    private final CashSlot slot;
-    private final WebTeller teller;
+    @Autowired
+    public CashSlot slot;
+    @Autowired
+    private WebTeller teller;
     private ATMServer server;
-
-    public ServiceHooks(CashSlot slot, WebTeller teller) {
-        this.slot = slot;
-        this.teller = teller;
-    }
 
     //    Annotating feature will automatically run these methods on each scenario
     @Before("@atm-web")
@@ -25,7 +23,7 @@ public class ServiceHooks {
         System.out.println("Starting ATM Backend ... port " + WEBPORT);
         server = new ATMServer(WEBPORT, slot);
         server.start();
-        teller.goToMain();
+        teller.openMainPage();
     }
 
     @After("@atm-web")

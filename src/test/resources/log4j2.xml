@@ -22,7 +22,8 @@
         </Logger>
 
         <!-- mandatory root logger -->
-        <Root level="all">
+        <!-- control spring logging too -->
+        <Root level="info">
             <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>

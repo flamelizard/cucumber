@@ -53,8 +53,8 @@
                             <arguments>
                                 <argument>--plugin</argument>
                                 <argument>html:out</argument>
-                                <argument>--tags</argument>
-                                <argument>@debug</argument>
+                                <!--<argument>&#45;&#45;tags</argument>-->
+                                <!--<argument>@debug</argument>-->
                                 <argument>--strict</argument>
                                 <argument>--glue</argument>
                                 <argument>eu.guy.cucumber.atm.step_definitions</argument>
@@ -152,26 +152,31 @@
             <version>8.0.13</version>
         </dependency>
 
-        <!--Various DI support-->
+        <!--Various DI support, enable only one-->
+        <!--<dependency>-->
+        <!--<groupId>org.picocontainer</groupId>-->
+        <!--<artifactId>picocontainer</artifactId>-->
+        <!--<version>2.15</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>info.cukes</groupId>-->
+        <!--<artifactId>cucumber-picocontainer</artifactId>-->
+        <!--<version>1.2.5</version>-->
+        <!--</dependency>-->
         <dependency>
-            <groupId>org.picocontainer</groupId>
-            <artifactId>picocontainer</artifactId>
-            <version>2.15</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.1.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.1.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>info.cukes</groupId>
-            <artifactId>cucumber-picocontainer</artifactId>
+            <artifactId>cucumber-spring</artifactId>
             <version>1.2.5</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>info.cukes</groupId>-->
-        <!--<artifactId>cucumber-guice</artifactId>-->
-        <!--<version>1.2.5</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.google.inject</groupId>-->
-        <!--<artifactId>guice</artifactId>-->
-        <!--<version>4.2.0</version>-->
-        <!--</dependency>-->
     </dependencies>
 </project>

@@ -1,6 +1,5 @@
 package eu.guy.cucumber.atm.domain;
 
-import eu.guy.cucumber.atm.common.DriverFactory;
 import eu.guy.cucumber.atm.step_definitions.hooks.ServiceHooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
@@ -8,11 +7,12 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 public class WebTeller implements Teller {
     private EventFiringWebDriver webDriver;
 
-    public WebTeller() {
-        this.webDriver = DriverFactory.createChromeDriver();
+    //    inject with Spring
+    public WebTeller(EventFiringWebDriver driver) {
+        this.webDriver = driver;
     }
 
-    public void goToMain() {
+    public void openMainPage() {
         webDriver.get("http://localhost:" + ServiceHooks.WEBPORT);
     }
 

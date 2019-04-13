@@ -1,9 +1,7 @@
-The Cucumber for Java
-=====================
+# The Cucumber for Java
 
 Learning project following chapters from book The Cucumber for Java.
 Individual commits vaguely match book chapters.
-
 The project aims to build simple ATM for Nice Bank, company that is
 favored by 9 out of 10 clients :-)
 
@@ -18,6 +16,15 @@ Technologies
 - simple ORM with Java ActiveJDBC
 - Selenium WebDriver
 - Liquibase
+- Spring DI
+
+## Build project
+Start MySQL and create app user and database.
+Build and run tests with Maven
+```
+mvn test
+```
+
 
 ## Takeaway
 
@@ -32,7 +39,7 @@ I cannot extend Model subclass as it behaves unexpectedly.
 Db table can be associated only with single class. The other class will
 fail to locate table even though the table exists.
 
-Error - failed to determine Model class name, are you sure models have been instrumented?
+__Error - failed to determine Model class name, are you sure models have been instrumented?__
 - instrumentation run at wrong stage `process-classes`
 - change to `process-test-classes` that runs after test class compilation
 
