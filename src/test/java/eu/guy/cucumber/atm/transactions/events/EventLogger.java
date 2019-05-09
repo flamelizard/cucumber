@@ -18,7 +18,10 @@ Event handling package is a support for E2E testing of async system.
 
 The test waits for a specific event to occur and then checks the assumption.
 Obviously, event-driven testing needs to have a support built-in the program.
+
+Log event when TransactionProcessor processed a transaction in queue
  */
+// TODO replace with simple query for transaction status in db
 public class EventLogger {
     private static String LOGFILE = AppSetup.getProjectProperty("event.log.file");
     private static Logger log = LogManager.getLogger(EventLogger.class);

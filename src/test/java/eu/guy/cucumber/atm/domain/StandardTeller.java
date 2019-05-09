@@ -1,5 +1,6 @@
 package eu.guy.cucumber.atm.domain;
 
+import eu.guy.cucumber.atm.transactions.TransactionHandler;
 import eu.guy.cucumber.atm.transactions.events.EventLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +27,11 @@ public class StandardTeller implements Teller {
         String trnType = event.getOrDefault("type", "");
         switch (trnType) {
             case "transaction":
-                cashSlot.dispense(amount);
+                try {
+                    cashSlot.dispense(amount);
+                } catch (Exception ex) {
+                    TransactionHandler.resetTrn(trnId);
+                }
                 break;
             case "failure":
                 log.error(event.get("message"));

@@ -11,7 +11,6 @@ import static eu.guy.cucumber.atm.transactions.events.EventLogger.logEvent;
 
 // TODO turn to threaded class to prevent running processQueue directly
 public class TransactionProcessor {
-    private static TransactionQueue queue = new TransactionQueue();
 
     public static void main(String[] args) throws Exception {
         TransactionProcessor.processQueue();
@@ -20,19 +19,24 @@ public class TransactionProcessor {
     private static void processQueue() throws BusinessException {
         String trnType;
         Money trnAmount, balance;
-        Instruction inst;
+        Transaction trn;
         Account toAccount;
 
 //        !! Forever loop, should run in a thread
         while (true) {
-            inst = queue.read();
-            if (inst == null) {
-                sleep(1);
+            trn = TransactionHandler.getPending();
+            if (trn == null) {
+                sleep(2);
                 continue;
             }
-            trnType = inst.getType();
-            trnAmount = Money.convert(inst.getAmount());
-            toAccount = Account.getAccount(inst.getAccNumber());
+//            System.out.println("[process-trn " + trn);
+            trnType = trn.getType();
+            trnAmount = Money.convert(String.valueOf(trn.getAmount()));
+            toAccount = Account.getAccountOrNull(trn.getAccNum());
+            if (toAccount == null) {
+                trn.failed();
+                throw new BusinessException("Account does not exists: " + trn.getAccNum());
+            }
             balance = toAccount.getBalance();
             switch (trnType) {
                 case "+":
@@ -42,18 +46,21 @@ public class TransactionProcessor {
                     try {
                         balance.subtract(trnAmount);
                     } catch (BusinessException ex) {
-                        logEvent(new Event("failure", inst.getId())
+                        logEvent(new Event("failure", trn.getTrnId())
                                 .add("message", ex.getMessage()));
+                        trn.failed();
                         continue;
                     }
                     break;
                 default:
-                    logEvent(new Event("failure", inst.getId())
+                    logEvent(new Event("failure", trn.getTrnId())
                             .add("message", "Unknown type of transaction"));
-                    return;
+                    trn.failed();
+                    continue;
             }
             toAccount.setBalance(balance);
-            logEvent(new Event("transaction", inst.getId())
+            trn.completed();
+            logEvent(new Event("transaction", trn.getTrnId())
                     .add("trnType", trnType)
                     .add("trnAmount", trnAmount.toString()));
         }

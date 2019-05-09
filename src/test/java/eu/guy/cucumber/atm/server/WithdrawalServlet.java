@@ -22,7 +22,7 @@ public class WithdrawalServlet extends HttpServlet {
         Integer accNumber = Integer.valueOf(req.getParameter("account"));
 
         DataStore.createConnection();
-        Account account = Account.getAccount(accNumber);
+        Account account = Account.getAccountOrNull(accNumber);
 
         Teller teller = new StandardTeller(cashSlot);
         teller.withdrawFrom(account, Money.convert(amount));

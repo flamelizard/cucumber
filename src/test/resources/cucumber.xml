@@ -20,8 +20,9 @@ Mark classes for injection
         </constructor-arg>
     </bean>
     <!-- test account instance -->
-    <bean class="eu.guy.cucumber.atm.domain.Account" scope="cucumber-glue">
-        <constructor-arg value="123"/>
+    <bean class="eu.guy.cucumber.atm.domain.Account"
+          scope="cucumber-glue" factory-method="createAccount">
+        <constructor-arg value="1234"/>
     </bean>
 
     <!--  Beans via code annotations -->

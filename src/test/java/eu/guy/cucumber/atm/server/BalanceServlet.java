@@ -19,7 +19,7 @@ public class BalanceServlet extends HttpServlet {
 
 //        .getParameter can access query or post parameters
         Integer accNumber = Integer.valueOf(req.getParameter("account"));
-        Account account = Account.getAccount(accNumber);
+        Account account = Account.getAccountOrNull(accNumber);
         if (account != null) {
             html = "<p>Your balance is <span id=\"acc-balance\">$" +
                     account.getBalance().getAmount() + "</span></p>";

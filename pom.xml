@@ -71,14 +71,14 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.6.2</version>
                 <configuration>
-                    <changeLogFile>src/test/resources/bank_schema.xml</changeLogFile>
+                    <changeLogFile>src/test/resources/db/changelog.master.xml</changeLogFile>
                     <url>jdbc:mysql://localhost:3306/bank</url>
                     <username>teller</username>
                     <password>password</password>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>process-resources</phase>
+                        <phase>process-test-resources</phase>
                         <goals>
                             <goal>update</goal>
                         </goals>

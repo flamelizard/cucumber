@@ -60,9 +60,9 @@ public class TransactionProcessorTest {
 
     @Test
     public void canProcessMultipleAccountTransactions() {
-        Account acc1 = new Account(1);
-        Account acc2 = new Account(2);
-        Account acc3 = new Account(999);
+        Account acc1 = Account.createAccount(1);
+        Account acc2 = Account.createAccount(2);
+        Account acc3 = Account.createAccount(999);
 
         acc1.credit(new Money(10));
         acc2.credit(new Money(20));
