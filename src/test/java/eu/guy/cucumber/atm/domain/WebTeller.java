@@ -2,12 +2,16 @@ package eu.guy.cucumber.atm.domain;
 
 import eu.guy.cucumber.atm.step_definitions.hooks.ServiceHooks;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
+
+import java.util.List;
+
+import static java.lang.String.format;
 
 public class WebTeller implements Teller {
     private EventFiringWebDriver webDriver;
 
-    //    inject with Spring
     public WebTeller(EventFiringWebDriver driver) {
         this.webDriver = driver;
     }
@@ -24,7 +28,7 @@ public class WebTeller implements Teller {
                 .sendKeys(String.valueOf(account.getAccountNum()));
 
 //      select from radio buttons of fixed value
-        String xpath = String.format(
+        String xpath = format(
                 "//input[@value='%d']", money.getAmount().intValue());
         webDriver.findElement(By.xpath(xpath)).click();
         webDriver.findElement(By.id("btn-withdraw")).click();
@@ -54,5 +58,11 @@ public class WebTeller implements Teller {
     public void close() {
         webDriver.close();
         webDriver.quit();
+    }
+
+    public boolean isDisplaying(String text) {
+        List<WebElement> res = webDriver.findElements(
+                By.xpath(format("//*[contains(text(),\"%s\")]", text)));
+        return res.size() > 0;
     }
 }

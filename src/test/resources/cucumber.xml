@@ -12,7 +12,7 @@ Mark classes for injection
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <!-- Bean via XML config, good for production/third party code -->
-    <bean class="eu.guy.cucumber.atm.domain.CashSlot" scope="cucumber-glue"/>
+    <bean class="eu.guy.cucumber.atm.domain.TestCashSlot" scope="cucumber-glue"/>
     <bean class="eu.guy.cucumber.atm.domain.WebTeller" scope="cucumber-glue">
         <constructor-arg>
             <bean class="eu.guy.cucumber.atm.common.DriverFactory"

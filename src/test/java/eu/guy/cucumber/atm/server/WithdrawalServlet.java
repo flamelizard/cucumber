@@ -25,7 +25,17 @@ public class WithdrawalServlet extends HttpServlet {
         Account account = Account.getAccountOrNull(accNumber);
 
         Teller teller = new StandardTeller(cashSlot);
-        teller.withdrawFrom(account, Money.convert(amount));
+        try {
+            teller.withdrawFrom(account, Money.convert(amount));
+        } catch (RuntimeException ex) {
+            resp.setContentType("text/html");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().println(
+                    "<html><title>ATM</title><body><p>"
+                            + ex.getMessage()
+                            + "</p></body></html>");
+            return;
+        }
 
         String html;
         if (cashSlot.getContents().getAmount() == 0) {

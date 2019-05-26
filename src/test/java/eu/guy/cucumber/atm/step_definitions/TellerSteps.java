@@ -10,6 +10,7 @@ import eu.guy.cucumber.atm.step_definitions.transforms.MoneyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class TellerSteps {
@@ -31,5 +32,11 @@ public class TellerSteps {
     @Then("^I should see that my balance is (\\$[\\d.]+)$")
     public void iSeeBalance(@Transform(MoneyConverter.class) Money balance) {
         assertEquals(balance, teller.getDisplayedBalance());
+    }
+
+    @Then("I should see an out-of-order message")
+    public void iSeeOutOfOrderMessage() {
+        assertTrue(teller.isDisplaying("Out of order"));
+
     }
 }

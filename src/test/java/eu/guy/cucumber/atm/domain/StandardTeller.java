@@ -16,7 +16,7 @@ public class StandardTeller implements Teller {
         this.cashSlot = cashSlot;
     }
 
-    public void withdrawFrom(Account account, Money amount) {
+    public void withdrawFrom(Account account, Money amount) throws RuntimeException {
         Integer trnId = account.debit(amount);
         Map<String, String> event = EventLogger.waitForEvent(trnId, 3);
         if (event == null) {
@@ -29,10 +29,11 @@ public class StandardTeller implements Teller {
             case "transaction":
                 try {
                     cashSlot.dispense(amount);
-                } catch (Exception ex) {
-                    TransactionHandler.resetTrn(trnId);
+                    break;
+                } catch (RuntimeException ex) {
+                    TransactionHandler.resetTransaction(trnId);
+                    throw ex;
                 }
-                break;
             case "failure":
                 log.error(event.get("message"));
                 break;

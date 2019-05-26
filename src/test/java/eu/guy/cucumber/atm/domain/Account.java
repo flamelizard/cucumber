@@ -1,12 +1,10 @@
 package eu.guy.cucumber.atm.domain;
 
 import eu.guy.cucumber.atm.transactions.TransactionHandler;
-import eu.guy.cucumber.atm.transactions.TransactionQueue;
 import org.javalite.activejdbc.Model;
 
 // ActiveJDBC Model to use Mysql table as an object
 public class Account extends Model {
-    private TransactionQueue queue = new TransactionQueue();
     private TransactionHandler handler = new TransactionHandler();
 
     //    no-param const must for activeJDBC

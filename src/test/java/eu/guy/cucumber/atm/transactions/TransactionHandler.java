@@ -23,27 +23,18 @@ public class TransactionHandler {
         return t.getTrnId();
     }
 
-    public static Transaction getPending() {
-        List<Transaction> pending = Transaction
-                .where("status = " + Status.Waiting.getId())
-                .orderBy("id asc");
-        if (pending.size() > 0)
-            return pending.get(0);
-        return null;
-    }
-
     //    TODO fun, parsing / comparing timestamp
     public static List<Transaction> getFromDate(Date d) {
         throw new NotImplementedException("Implement me");
     }
 
-    public static Transaction readById(int trnId) {
+    public static Transaction getTransaction(int trnId) {
         return Transaction.findFirst("id = '" + trnId + "'");
     }
 
     //    dead simple - generate counter transaction where transaction type is flipped
-    public static void resetTrn(int trnId) {
-        Transaction trn = readById(trnId);
+    public static void resetTransaction(int trnId) {
+        Transaction trn = getTransaction(trnId);
         String type = trn.isDebit() ? "+" : "-";
         int id = writeTrn(trn.getAccNum(), type, trn.getAmount());
         EventLogger.waitForEvent(id, 5);

@@ -1,4 +1,4 @@
-package eu.guy.cucumber.atm.tests.unittest;
+package eu.guy.cucumber.atm.tests;
 
 import eu.guy.cucumber.atm.domain.BusinessException;
 import eu.guy.cucumber.atm.domain.Money;

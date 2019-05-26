@@ -2,7 +2,6 @@
 @atm-web
 Feature: Cash Withdrawal
 
-  @jenkins
   Scenario: Successful withdrawal from an account
     Given my account has been credited with $500
     When I withdraw $100
@@ -13,3 +12,11 @@ Feature: Cash Withdrawal
     Given my account has been credited with $1000000
     When I withdraw $1000000
     Then $1000000 should be dispensed
+
+  Scenario: Unsuccessful withdrawal due to technical fault
+    Given my account has been credited with $100
+    But the cash slot has developed a fault
+    When I withdraw $50
+    Then I should see an out-of-order message
+    And $0 should be dispensed
+    And the balance of my account should be $100

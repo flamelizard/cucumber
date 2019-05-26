@@ -1,9 +1,11 @@
 package eu.guy.cucumber.atm.step_definitions;
 
 import cucumber.api.Transform;
+import cucumber.api.java.en.But;
 import cucumber.api.java.en.Then;
 import eu.guy.cucumber.atm.domain.CashSlot;
 import eu.guy.cucumber.atm.domain.Money;
+import eu.guy.cucumber.atm.domain.TestCashSlot;
 import eu.guy.cucumber.atm.domain.WebTeller;
 import eu.guy.cucumber.atm.step_definitions.transforms.MoneyConverter;
 import org.junit.Assert;
@@ -26,5 +28,10 @@ public class CashslotSteps {
     @Then("I should be told that I have insufficient funds")
     public void customerHasInsufficientFunds() {
         Assert.assertTrue(teller.accountHasInsufficientFunds());
+    }
+
+    @But("the cash slot has developed a fault")
+    public void cashSlotIsFaulty() {
+        ((TestCashSlot) slot).injectFault();
     }
 }

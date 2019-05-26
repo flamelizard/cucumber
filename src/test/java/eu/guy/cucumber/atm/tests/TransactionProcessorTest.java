@@ -1,15 +1,13 @@
-package eu.guy.cucumber.atm.tests.unittest;
+package eu.guy.cucumber.atm.tests;
 
 import eu.guy.cucumber.atm.domain.Account;
 import eu.guy.cucumber.atm.domain.Money;
 import eu.guy.cucumber.atm.server.DataStore;
 import eu.guy.cucumber.atm.transactions.TransactionProcessor;
-import eu.guy.cucumber.atm.transactions.TransactionQueue;
 import eu.guy.cucumber.atm.transactions.events.EventLogger;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -17,30 +15,28 @@ import java.util.Optional;
 import static eu.guy.cucumber.atm.step_definitions.AccountSteps.assertForBalance;
 import static org.junit.Assert.assertEquals;
 
-// TODO intermittent error to read log file due to threads race condition
 public class TransactionProcessorTest {
-    private static Thread processor;
+    private static TransactionProcessor processor;
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     private Account testAccount;
 
     @BeforeClass
     public static void runTransactionDaemon() {
-        processor = TransactionProcessor.getProcessQueueThreaded();
-        processor.start();
         DataStore.createConnection();
+        processor = new TransactionProcessor();
+        processor.go();
     }
 
     @AfterClass
     public static void stopDaemon() {
-        processor.interrupt();
+        processor.quit();
     }
 
     @Before
-    public void setup() throws IOException {
-        TransactionQueue.init();
+    public void setup() {
         DataStore.deleteAccounts();
-        testAccount = new Account();
+        testAccount = Account.createAccount(567);
     }
 
     @Test

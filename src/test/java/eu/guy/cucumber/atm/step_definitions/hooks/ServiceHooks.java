@@ -3,6 +3,7 @@ package eu.guy.cucumber.atm.step_definitions.hooks;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import eu.guy.cucumber.atm.common.Utils;
 import eu.guy.cucumber.atm.domain.CashSlot;
 import eu.guy.cucumber.atm.domain.WebTeller;
 import eu.guy.cucumber.atm.server.ATMServer;
@@ -17,7 +18,7 @@ public class ServiceHooks {
     @Autowired
     private WebTeller teller;
     private ATMServer server;
-    private Thread processor;
+    private TransactionProcessor processor;
 
     //    Annotating feature will automatically run these methods on each scenario
     @Before("@atm-web")
@@ -35,13 +36,13 @@ public class ServiceHooks {
 
     @Before
     public void startProcessor() {
-        processor = TransactionProcessor.getProcessQueueThreaded();
-        processor.start();
+        processor = new TransactionProcessor();
+        processor.go();
     }
 
     @After
     public void stopProcessor() {
-        processor.interrupt();
+        processor.quit();
     }
 
     @After
@@ -50,6 +51,7 @@ public class ServiceHooks {
             byte[] screenshot = teller.getWebDriver().getScreenshotAs(OutputType.BYTES);
             scenario.embed(screenshot, "image/png"); // save image
         }
+        Utils.sleep(1);  // let visual check
         teller.close();
     }
 }
