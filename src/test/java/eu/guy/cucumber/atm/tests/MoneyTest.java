@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class MoneyTest {
 
@@ -40,13 +41,12 @@ public class MoneyTest {
         d.subtract(new Money(0, 0));
         assertEquals(d, new Money(0, 0));
 
-        thrown.expect(BusinessException.class);
+//        thrown.expect(BusinessException.class);
         d = new Money(0, 50);
-        d.subtract(new Money(0, 90));
+        assertFalse(d.subtract(new Money(0, 90)));
 
-        thrown.expect(BusinessException.class);
         d = new Money(100, 0);
-        d.subtract(new Money(101, 0));
+        assertFalse(d.subtract(new Money(101, 0)));
     }
 
     @Test

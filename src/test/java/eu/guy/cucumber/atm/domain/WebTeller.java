@@ -23,6 +23,7 @@ public class WebTeller implements Teller {
     //    TODO may refactor to page object
     @Override
     public void withdrawFrom(Account account, Money money) {
+//        TODO, practice, check first available values to select
         webDriver.findElement(By.cssSelector(
                 "form#withdraw input[name='account']"))
                 .sendKeys(String.valueOf(account.getAccountNum()));
@@ -32,10 +33,6 @@ public class WebTeller implements Teller {
                 "//input[@value='%d']", money.getAmount().intValue());
         webDriver.findElement(By.xpath(xpath)).click();
         webDriver.findElement(By.id("btn-withdraw")).click();
-    }
-
-    public boolean accountHasInsufficientFunds() {
-        return webDriver.getPageSource().contains("insufficient funds");
     }
 
     public void checkBalance(Account account) {

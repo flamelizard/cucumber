@@ -35,10 +35,10 @@ public class StandardTeller implements Teller {
                     throw ex;
                 }
             case "failure":
-                log.error(event.get("message"));
-                break;
+                String errorMsg = event.get("message");
+                throw new RuntimeException(errorMsg);
             default:
-                log.warn("Transaction failed <" + trnId + ">");
+                log.warn("Unknown transaction status <" + trnId + ">");
         }
     }
 }

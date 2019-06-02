@@ -46,11 +46,9 @@ public class TransactionProcessor extends Thread {
                 balance.add(trnAmount);
                 break;
             case "-":
-                try {
-                    balance.subtract(trnAmount);
-                } catch (BusinessException ex) {
+                if (!balance.subtract(trnAmount)) {
                     logEvent(new Event("failure", trn.getTrnId())
-                            .add("message", ex.getMessage()));
+                            .add("message", "Account has insufficient funds"));
                     trn.failed();
                     return;
                 }

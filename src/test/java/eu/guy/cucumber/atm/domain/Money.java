@@ -1,6 +1,6 @@
 package eu.guy.cucumber.atm.domain;
 
-public class Money {
+public class Money implements Comparable<Money> {
     public static int CENTPERDOLLAR = 100;
     private int dollar;
     private int cents;
@@ -36,10 +36,10 @@ public class Money {
     public boolean equals(Object that) {
         if (!(that instanceof Money))
             return false;
-        return this.getAmount().equals(((Money) that).getAmount());
+        return this.compareTo((Money) that) == 0;
     }
 
-    public void subtract(Money amount) throws BusinessException {
+    public boolean subtract(Money amount) {
         int c = this.cents - amount.cents;
         int d = this.dollar - amount.dollar;
         if (c < 0) {
@@ -47,9 +47,10 @@ public class Money {
             c = CENTPERDOLLAR + c;
         }
         if (d < 0)
-            throw new BusinessException("Result dollars cannot be negative");
+            return false;
         this.dollar = d;
         this.cents = c;
+        return true;
     }
 
     public void add(Money amount) {
@@ -66,5 +67,10 @@ public class Money {
     @Override
     public String toString() {
         return String.format("%s.%s", dollar, cents);
+    }
+
+    @Override
+    public int compareTo(Money other) {
+        return this.getAmount().compareTo(other.getAmount());
     }
 }

@@ -3,6 +3,7 @@ package eu.guy.cucumber.atm.step_definitions;
 import cucumber.api.Transform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import eu.guy.cucumber.atm.AppSetup;
 import eu.guy.cucumber.atm.common.Utils;
 import eu.guy.cucumber.atm.domain.Account;
 import eu.guy.cucumber.atm.domain.Money;
@@ -60,5 +61,21 @@ public class AccountSteps {
             @Transform(MoneyConverter.class) Money money) {
         waitForBalance(money, testAccount);
         assertEquals(money, testAccount.getBalance());
+    }
+
+    @Given("^my account is in credit$")
+    public void accountInCredit() {
+        Integer amount = Integer.valueOf(
+                AppSetup.getProjectProperty("acc.credit.default"));
+        Money credit = new Money(amount);
+        testAccount.credit(credit);
+        waitForBalance(credit, testAccount);
+    }
+
+    @Then("my balance is unchanged")
+    public void balanceUnchanged() {
+        Float expected = Float.valueOf(
+                AppSetup.getProjectProperty("acc.credit.default"));
+        assertEquals(expected, testAccount.getBalance().getAmount());
     }
 }

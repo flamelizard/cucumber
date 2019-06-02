@@ -37,6 +37,10 @@ public class TellerSteps {
     @Then("I should see an out-of-order message")
     public void iSeeOutOfOrderMessage() {
         assertTrue(teller.isDisplaying("Out of order"));
+    }
 
+    @Then("I should see ask-for-less message")
+    public void seeAskForLessMsg() {
+        assertTrue(teller.isDisplaying("Ask for less"));
     }
 }

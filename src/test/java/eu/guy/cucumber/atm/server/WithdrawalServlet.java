@@ -38,13 +38,8 @@ public class WithdrawalServlet extends HttpServlet {
         }
 
         String html;
-        if (cashSlot.getContents().getAmount() == 0) {
-            html = "<html><body><p>Dispensed $0</p>" +
-                    "<p>Sorry, insufficient funds</p></body></html>";
-        } else {
-            html = "<html><body><p>Dispensed $" +
-                    cashSlot.getContents().getAmount() + "</p></body></html>";
-        }
+        html = "<html><body><p>Dispensed $" +
+                cashSlot.getContents().getAmount() + "</p></body></html>";
         resp.setContentType("text/html");
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().println(html);
