@@ -3,7 +3,7 @@ package eu.guy.cucumber.atm.step_definitions;
 import cucumber.api.Transform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import eu.guy.cucumber.atm.AppSetup;
+import eu.guy.cucumber.atm.AppConfig;
 import eu.guy.cucumber.atm.common.Utils;
 import eu.guy.cucumber.atm.domain.Account;
 import eu.guy.cucumber.atm.domain.Money;
@@ -16,7 +16,7 @@ import java.time.Duration;
 import static org.junit.Assert.assertEquals;
 
 // enough annotating one step / hook class
-@ContextConfiguration("classpath:cucumber.xml")
+@ContextConfiguration("classpath:spring-config.xml")
 public class AccountSteps {
     @Autowired
     private Account testAccount;
@@ -66,7 +66,7 @@ public class AccountSteps {
     @Given("^my account is in credit$")
     public void accountInCredit() {
         Integer amount = Integer.valueOf(
-                AppSetup.getProjectProperty("acc.credit.default"));
+                AppConfig.getProjectProperty("acc.credit.default"));
         Money credit = new Money(amount);
         testAccount.credit(credit);
         waitForBalance(credit, testAccount);
@@ -75,7 +75,7 @@ public class AccountSteps {
     @Then("my balance is unchanged")
     public void balanceUnchanged() {
         Float expected = Float.valueOf(
-                AppSetup.getProjectProperty("acc.credit.default"));
+                AppConfig.getProjectProperty("acc.credit.default"));
         assertEquals(expected, testAccount.getBalance().getAmount());
     }
 }

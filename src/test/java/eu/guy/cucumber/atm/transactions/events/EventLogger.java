@@ -1,6 +1,6 @@
 package eu.guy.cucumber.atm.transactions.events;
 
-import eu.guy.cucumber.atm.AppSetup;
+import eu.guy.cucumber.atm.AppConfig;
 import eu.guy.cucumber.atm.domain.BusinessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +23,7 @@ Log event when TransactionProcessor processed a transaction in queue
  */
 // TODO replace with simple query for transaction status in db
 public class EventLogger {
-    private static String LOGFILE = AppSetup.getProjectProperty("event.log.file");
+    private static String LOGFILE = AppConfig.getProjectProperty("event.log.file");
     private static Logger log = LogManager.getLogger(EventLogger.class);
 
     //    log to an event log file

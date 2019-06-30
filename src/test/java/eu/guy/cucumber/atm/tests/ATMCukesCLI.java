@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.nio.file.Paths;
 
-public class RunCukesCLI {
+public class ATMCukesCLI {
     public static String FEATURE_ROOT = "D:\\projects\\cucumber\\src\\main\\" +
             "java\\eu\\guy\\cucumber\\atm\\features";
     private String stepDefinitions = "eu.guy.cucumber.atm.step_definitions";

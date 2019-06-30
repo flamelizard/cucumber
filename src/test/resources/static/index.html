@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>Nice Bank ATM</title>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
 <h1>Welcome to our nice bank!</h1>
@@ -10,9 +11,13 @@
             <legend>Money-O-Mat</legend>
             <input name="account" placeholder="Account number" required style="display: block" type="number">
             <input type="radio" name="amount" value="10">10<br>
-            <input type="radio" name="amount" value="50" checked> 50<br>
+            <input name="amount" type="radio" value="50"> 50<br>
             <input type="radio" name="amount" value="100"> 100<br>
             <input type="radio" name="amount" value="1000000"> 1000000<br>
+            <p>
+                <input autocomplete="off" id="cus-amount" name="amount" placeholder="Different amount" type="text">
+                <span id="amount-over-balance"></span>
+            </p>
             <input id="btn-withdraw" type="submit" value="Withdraw">
         </fieldset>
     </form>
@@ -42,5 +47,7 @@ function fireAjax() {
     req.open("GET", url);
 }
 </script>
+<script src="jquery-1.10.2.js"></script>
+<script src="validation.js"></script>
 </body>
 </html>

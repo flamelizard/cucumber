@@ -2,10 +2,10 @@ package eu.guy.cucumber.atm.domain;
 
 import eu.guy.cucumber.atm.step_definitions.hooks.ServiceHooks;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
-
-import java.util.List;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static java.lang.String.format;
 
@@ -35,6 +35,23 @@ public class WebTeller implements Teller {
         webDriver.findElement(By.id("btn-withdraw")).click();
     }
 
+    private void enterAccount(Account account) {
+        webDriver.findElement(By.cssSelector(
+                "form#withdraw input[name='account']"))
+                .sendKeys(String.valueOf(account.getAccountNum()));
+    }
+
+    private void enterWithdrawal(Money amount) {
+        webDriver.findElement(By.cssSelector(
+                "input[type='text'][name='amount']"))
+                .sendKeys(amount.getAmount().toString());
+    }
+
+    public void fillwithdrawal(Account account, Money amount) {
+        enterAccount(account);
+        enterWithdrawal(amount);
+    }
+
     public void checkBalance(Account account) {
         webDriver.findElement(By.cssSelector(
                 "form#balance input[name='account']"))
@@ -58,8 +75,14 @@ public class WebTeller implements Teller {
     }
 
     public boolean isDisplaying(String text) {
-        List<WebElement> res = webDriver.findElements(
-                By.xpath(format("//*[contains(text(),\"%s\")]", text)));
-        return res.size() > 0;
+        By xpath = By.xpath(format("//*[contains(text(),\"%s\")]", text));
+        try {
+            new WebDriverWait(webDriver, 3)
+                    .until(ExpectedConditions.presenceOfElementLocated(xpath));
+        } catch (TimeoutException ex) {
+            return false;
+        }
+        return true;
     }
+
 }

@@ -24,6 +24,11 @@ public class TellerSteps {
         teller.withdrawFrom(account, amount);
     }
 
+    @When("^I type \\$([\\d.]+)$")
+    public void iType(@Transform(MoneyConverter.class) Money amount) {
+        teller.fillwithdrawal(account, amount);
+    }
+
     @When("^I check my balance")
     public void iCheckBalance() {
         teller.checkBalance(account);

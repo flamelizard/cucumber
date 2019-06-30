@@ -13,10 +13,12 @@ Mark classes for injection
 
     <!-- Bean via XML config, good for production/third party code -->
     <bean class="eu.guy.cucumber.atm.domain.TestCashSlot" scope="cucumber-glue"/>
-    <bean class="eu.guy.cucumber.atm.domain.WebTeller" scope="cucumber-glue">
+    <!-- not cucumber but default spring context, singleton in essence -->
+    <bean class="eu.guy.cucumber.atm.domain.WebTeller" destroy-method="close">
         <constructor-arg>
+            <!-- nested bean -->
             <bean class="eu.guy.cucumber.atm.common.DriverFactory"
-                  factory-method="createChromeDriver" lazy-init="true" scope="cucumber.glue"/>
+                  factory-method="createChromeDriver" lazy-init="true"/>
         </constructor-arg>
     </bean>
     <!-- test account instance -->

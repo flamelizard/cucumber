@@ -51,4 +51,9 @@ public class Utils {
             System.out.println("[classpath " + path);
         }
     }
+
+    public static Path getTestResourceDir() {
+        Path root = Paths.get(System.getProperty("user.dir"));
+        return root.resolve("src/test/resources/");
+    }
 }

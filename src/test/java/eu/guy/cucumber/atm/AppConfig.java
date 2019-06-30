@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 // TODO try refactor to have common entry point, without using cucumber hooks
-public class AppSetup {
+public class AppConfig {
     public static String projectFile = "project.properties";
     private static Properties project;
 

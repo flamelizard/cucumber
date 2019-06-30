@@ -20,3 +20,9 @@ Feature: Cash Withdrawal
     Then I should see an out-of-order message
     And $0 should be dispensed
     And the balance of my account should be $100
+
+  Scenario: Ask to withdraw less before submit
+    Given my account is in credit
+    And ATM contains $100
+    When I type $120
+    Then I should see ask-for-less message

@@ -1,7 +1,13 @@
 package eu.guy.cucumber.atm.server;
 
+import eu.guy.cucumber.atm.common.Utils;
 import eu.guy.cucumber.atm.domain.CashSlot;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -12,20 +18,35 @@ public class ATMServer {
     private Server server;
 
     public ATMServer(int port, CashSlot cashSlot) {
-//        TODO binds to DockerNAT 10.75, grab server endpoint programmatically
         server = new Server(
                 InetSocketAddress.createUnresolved("localhost", port));
-        ServletContextHandler context = new ServletContextHandler(
+        ServletContextHandler servletHandler = new ServletContextHandler(
                 ServletContextHandler.SESSIONS
         );
-        server.setHandler(context);
-
-//        set routes and its handlers
-        context.addServlet(new ServletHolder(new MainServlet()), "/");
-        context.addServlet(new ServletHolder(
+//        URL route -> request handler
+        servletHandler.addServlet(new ServletHolder(new MainServlet()), "/");
+        servletHandler.addServlet(new ServletHolder(
                 new WithdrawalServlet(cashSlot)), "/withdraw");
-        context.addServlet(new ServletHolder(
+        servletHandler.addServlet(new ServletHolder(
                 new BalanceServlet()), "/balance");
+        servletHandler.addServlet(new ServletHolder(
+                new ValidationServlet(cashSlot)), "/validate");
+
+//        serve static files
+//        must add context matching (url)
+        ContextHandler ctxHandler = new ContextHandler();
+        ctxHandler.setContextPath("/");
+        ResourceHandler resHandler = new ResourceHandler();
+        resHandler.setResourceBase(
+                Utils.getTestResourceDir().resolve("static").toString());
+        ctxHandler.setHandler(resHandler);
+
+//        collection selects handler based on the longest URL match with request
+//        DefaultHandler gives 404
+        ContextHandlerCollection handlers = new ContextHandlerCollection();
+        handlers.setHandlers(new Handler[]{ctxHandler, servletHandler, new DefaultHandler()});
+
+        server.setHandler(handlers);
     }
 
     public static void main(String[] args) throws Exception {

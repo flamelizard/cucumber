@@ -9,7 +9,7 @@ public class CashSlot {
     }
 
     public void dispense(Money requested) {
-        if (available.compareTo(requested) < 0)
+        if (!canDispense(requested))
             throw new RuntimeException("Ask for less. ATM funds exceeded");
         available.subtract(requested);
         contents = requested;
@@ -18,5 +18,9 @@ public class CashSlot {
     public void load(Money amount) {
 //        intentional simple re-set
         available = amount;
+    }
+
+    public boolean canDispense(Money amount) {
+        return available.compareTo(amount) >= 0;
     }
 }
