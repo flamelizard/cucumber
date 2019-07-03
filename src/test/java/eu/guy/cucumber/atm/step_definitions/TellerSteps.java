@@ -18,6 +18,7 @@ public class TellerSteps {
     private WebTeller teller;
     @Autowired
     private Account account;
+    private Money balance;
 
     @When("^I withdraw \\$([\\d.]+)$")
     public void iWithdraw(@Transform(MoneyConverter.class) Money amount) {
@@ -26,17 +27,17 @@ public class TellerSteps {
 
     @When("^I type \\$([\\d.]+)$")
     public void iType(@Transform(MoneyConverter.class) Money amount) {
-        teller.fillwithdrawal(account, amount);
+        teller.fillWithdrawAmount(account, amount);
     }
 
     @When("^I check my balance")
     public void iCheckBalance() {
-        teller.checkBalance(account);
+        balance = teller.checkBalance(account);
     }
 
     @Then("^I should see that my balance is (\\$[\\d.]+)$")
-    public void iSeeBalance(@Transform(MoneyConverter.class) Money balance) {
-        assertEquals(balance, teller.getDisplayedBalance());
+    public void iSeeBalance(@Transform(MoneyConverter.class) Money expected) {
+        assertEquals(expected, balance);
     }
 
     @Then("I should see an out-of-order message")

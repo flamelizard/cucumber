@@ -7,8 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static java.lang.String.format;
+
 public class WithdrawalServlet extends HttpServlet {
     private final CashSlot cashSlot;
+    private String htmlFmt = "<html>" +
+            "<head><title>Withdrawal Status</title></head>" +
+            "<body>%s</body>" +
+            "</html>";
+    private String body;
 
     public WithdrawalServlet(CashSlot cashSlot) {
         this.cashSlot = cashSlot;
@@ -28,20 +35,16 @@ public class WithdrawalServlet extends HttpServlet {
         try {
             teller.withdrawFrom(account, Money.convert(amount));
         } catch (RuntimeException ex) {
+            body = "<p>" + ex.getMessage() + "</p>";
             resp.setContentType("text/html");
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().println(
-                    "<html><title>ATM</title><body><p>"
-                            + ex.getMessage()
-                            + "</p></body></html>");
+            resp.getWriter().println(format(htmlFmt, body));
             return;
         }
 
-        String html;
-        html = "<html><body><p>Dispensed $" +
-                cashSlot.getContents().getAmount() + "</p></body></html>";
+        body = "<p>Dispensed $" + cashSlot.getContents().getAmount() + "</p>";
         resp.setContentType("text/html");
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(html);
+        resp.getWriter().println(format(htmlFmt, body));
     }
 }
