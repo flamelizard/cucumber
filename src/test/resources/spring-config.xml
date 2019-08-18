@@ -12,11 +12,11 @@ Mark classes for injection
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <!-- Bean via XML config, good for production/third party code -->
-    <bean id="slot" class="eu.guy.cucumber.atm.domain.TestCashSlot"/>
+    <bean id="slot" class="eu.guy.cucumber.atm.domain.TestCashSlot" scope="cucumber-glue"/>
 
     <!-- not cucumber but default spring context (scope) -->
     <bean class="eu.guy.cucumber.atm.domain.AtmGuiFactory"
-          factory-method="createGui" lazy-init="true" destroy-method="close">
+          factory-method="createGui" lazy-init="true" destroy-method="close" scope="cucumber-glue">
         <constructor-arg>
             <!-- refer to an existing bean by id -->
             <ref bean="slot"/>

@@ -1,7 +1,7 @@
-# Start atm web interface instead of regular
 @atm-web
 Feature: Cash Withdrawal
 
+  @smoke
   Scenario: Successful withdrawal from an account
     Given my account has been credited with $500
     When I withdraw $100

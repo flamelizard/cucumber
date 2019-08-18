@@ -8,8 +8,10 @@ public class AtmGuiFactory {
     private static boolean shouldBypassGui = false;
 
     public static AtmGui createGui(CashSlot slot) {
-        if (shouldBypassGui)
+        String override = System.getProperty("test.override");
+        if (override != null && override.toLowerCase().contains("no-gui")) {
             return new DirectTeller(slot);
+        }
         return new WebTeller(DriverFactory.createChromeDriver());
     }
 
