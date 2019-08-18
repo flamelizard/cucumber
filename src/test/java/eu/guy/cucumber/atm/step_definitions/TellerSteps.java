@@ -4,8 +4,8 @@ import cucumber.api.Transform;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import eu.guy.cucumber.atm.domain.Account;
+import eu.guy.cucumber.atm.domain.AtmGui;
 import eu.guy.cucumber.atm.domain.Money;
-import eu.guy.cucumber.atm.domain.WebTeller;
 import eu.guy.cucumber.atm.step_definitions.transforms.MoneyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TellerSteps {
     @Autowired
-    private WebTeller teller;
+    private AtmGui teller;
     @Autowired
     private Account account;
     private Money balance;

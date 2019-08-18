@@ -52,9 +52,7 @@
                             <mainClass>cucumber.api.cli.Main</mainClass>
                             <arguments>
                                 <argument>--plugin</argument>
-                                <argument>html:out</argument>
-                                <!--<argument>&#45;&#45;tags</argument>-->
-                                <!--<argument>@debug</argument>-->
+                                <argument>html:cucumber-report</argument>
                                 <argument>--strict</argument>
                                 <argument>--glue</argument>
                                 <argument>eu.guy.cucumber.atm.step_definitions</argument>

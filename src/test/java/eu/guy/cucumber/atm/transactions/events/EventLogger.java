@@ -1,6 +1,6 @@
 package eu.guy.cucumber.atm.transactions.events;
 
-import eu.guy.cucumber.atm.AppConfig;
+import eu.guy.cucumber.atm.common.Config;
 import eu.guy.cucumber.atm.domain.BusinessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static eu.guy.cucumber.atm.common.Utils.sleep;
+import static eu.guy.cucumber.atm.common.Common.sleep;
 
 /*
 Event handling package is a support for E2E testing of async system.
@@ -23,7 +23,7 @@ Log event when TransactionProcessor processed a transaction in queue
  */
 // TODO replace with simple query for transaction status in db
 public class EventLogger {
-    private static String LOGFILE = AppConfig.getProjectProperty("event.log.file");
+    private static String LOGFILE = Config.getValue("event.log.file");
     private static Logger log = LogManager.getLogger(EventLogger.class);
 
     //    log to an event log file

@@ -3,8 +3,8 @@ package eu.guy.cucumber.atm.step_definitions;
 import cucumber.api.Transform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import eu.guy.cucumber.atm.AppConfig;
-import eu.guy.cucumber.atm.common.Utils;
+import eu.guy.cucumber.atm.common.Common;
+import eu.guy.cucumber.atm.common.Config;
 import eu.guy.cucumber.atm.domain.Account;
 import eu.guy.cucumber.atm.domain.Money;
 import eu.guy.cucumber.atm.step_definitions.transforms.MoneyConverter;
@@ -29,7 +29,7 @@ public class AccountSteps {
             if (balance.equals(expected)) {
                 return;
             }
-            Utils.sleep(1);
+            Common.sleep(1);
             duration = duration.minusSeconds(1);
         }
     }
@@ -43,7 +43,7 @@ public class AccountSteps {
             if (balance.equals(expected)) {
                 break;
             }
-            Utils.sleep(1);
+            Common.sleep(1);
             duration = duration.minusSeconds(1);
         }
         assertEquals(expected, balance);
@@ -66,7 +66,7 @@ public class AccountSteps {
     @Given("^my account is in credit$")
     public void accountInCredit() {
         Integer amount = Integer.valueOf(
-                AppConfig.getProjectProperty("acc.credit.default"));
+                Config.getValue("acc.credit.default"));
         Money credit = new Money(amount);
         testAccount.credit(credit);
         waitForBalance(credit, testAccount);
@@ -75,7 +75,7 @@ public class AccountSteps {
     @Then("my balance is unchanged")
     public void balanceUnchanged() {
         Float expected = Float.valueOf(
-                AppConfig.getProjectProperty("acc.credit.default"));
+                Config.getValue("acc.credit.default"));
         assertEquals(expected, testAccount.getBalance().getAmount());
     }
 }

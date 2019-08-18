@@ -3,29 +3,37 @@ package eu.guy.cucumber.atm.step_definitions.hooks;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import eu.guy.cucumber.atm.common.Config;
+import eu.guy.cucumber.atm.domain.AtmGui;
 import eu.guy.cucumber.atm.domain.CashSlot;
-import eu.guy.cucumber.atm.domain.WebTeller;
+import eu.guy.cucumber.atm.domain.impl.WebTeller;
 import eu.guy.cucumber.atm.server.ATMServer;
 import eu.guy.cucumber.atm.transactions.TransactionProcessor;
 import org.openqa.selenium.OutputType;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
 
 public class ServiceHooks {
     public static int WEBPORT = 9988;
     @Autowired
     private CashSlot slot;
     @Autowired
-    private WebTeller teller;
+    private AtmGui teller;
     private ATMServer server;
     private TransactionProcessor processor;
 
-    //    Annotating feature will automatically run these methods on each scenario
+    @Before(order = 0)
+    public void projectInit() throws IOException {
+        Config.loadConfig();
+    }
+
     @Before("@atm-web")
     public void startServer() throws Exception {
         System.out.println("Starting ATM Backend ... port " + WEBPORT);
         server = new ATMServer(WEBPORT, slot);
         server.start();
-        teller.openMainPage();
+        teller.open();
     }
 
     @After("@atm-web")
@@ -46,9 +54,10 @@ public class ServiceHooks {
 
     @After
     public void cleanUp(Scenario scenario) {
-        if (scenario.isFailed()) {
-            byte[] screenshot = teller.getWebDriver().getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png"); // save image
+        if (scenario.isFailed() && teller instanceof WebTeller) {
+            byte[] screenshot = ((WebTeller) teller).getWebDriver().getScreenshotAs(OutputType.BYTES);
+//            include screenshot in html report
+            scenario.embed(screenshot, "image/png");
         }
     }
 }

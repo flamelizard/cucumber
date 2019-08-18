@@ -1,6 +1,6 @@
 package eu.guy.cucumber.atm.server;
 
-import eu.guy.cucumber.atm.common.Utils;
+import eu.guy.cucumber.atm.common.Common;
 import eu.guy.cucumber.atm.domain.CashSlot;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -38,7 +38,7 @@ public class ATMServer {
         ctxHandler.setContextPath("/");
         ResourceHandler resHandler = new ResourceHandler();
         resHandler.setResourceBase(
-                Utils.getTestResourceDir().resolve("static").toString());
+                Common.getTestResourceDir().resolve("static").toString());
         ctxHandler.setHandler(resHandler);
 
 //        collection selects handler based on the longest URL match with request

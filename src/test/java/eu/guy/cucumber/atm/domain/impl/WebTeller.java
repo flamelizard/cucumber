@@ -1,5 +1,8 @@
-package eu.guy.cucumber.atm.domain;
+package eu.guy.cucumber.atm.domain.impl;
 
+import eu.guy.cucumber.atm.domain.Account;
+import eu.guy.cucumber.atm.domain.AtmGui;
+import eu.guy.cucumber.atm.domain.Money;
 import eu.guy.cucumber.atm.domain.pageobject.AccountPage;
 import eu.guy.cucumber.atm.domain.pageobject.BalancePage;
 import eu.guy.cucumber.atm.step_definitions.hooks.ServiceHooks;
@@ -11,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static java.lang.String.format;
 
-public class WebTeller implements Teller {
+public class WebTeller implements AtmGui {
     private EventFiringWebDriver webDriver;
     private BalancePage balancePage;
 
@@ -19,15 +22,21 @@ public class WebTeller implements Teller {
         this.webDriver = driver;
     }
 
-    public void openMainPage() {
+    public void open() {
         webDriver.get("http://localhost:" + ServiceHooks.WEBPORT);
+    }
+
+    public void close() {
+        if (webDriver != null) {
+            webDriver.close();
+            webDriver.quit();
+        }
     }
 
     private AccountPage getMainPage() {
         return new AccountPage(webDriver);
     }
 
-    @Override
     public void withdrawFrom(Account account, Money money) {
         String amount = String.valueOf(money.getAmount().intValue());
         getMainPage().withdrawFrom(account, amount);
@@ -46,11 +55,6 @@ public class WebTeller implements Teller {
 
     public EventFiringWebDriver getWebDriver() {
         return webDriver;
-    }
-
-    public void close() {
-        webDriver.close();
-        webDriver.quit();
     }
 
     public boolean isDisplaying(String text) {

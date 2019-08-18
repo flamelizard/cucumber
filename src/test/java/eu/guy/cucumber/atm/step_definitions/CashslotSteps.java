@@ -4,10 +4,10 @@ import cucumber.api.Transform;
 import cucumber.api.java.en.But;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import eu.guy.cucumber.atm.domain.AtmGui;
 import eu.guy.cucumber.atm.domain.CashSlot;
 import eu.guy.cucumber.atm.domain.Money;
 import eu.guy.cucumber.atm.domain.TestCashSlot;
-import eu.guy.cucumber.atm.domain.WebTeller;
 import eu.guy.cucumber.atm.step_definitions.transforms.MoneyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +18,7 @@ public class CashslotSteps {
     @Autowired
     private CashSlot slot;
     @Autowired
-    private WebTeller teller;
+    private AtmGui teller;
 
     @Then("^\\$([\\d.]+) should be dispensed$")
     public void $ShouldBeDispensed(

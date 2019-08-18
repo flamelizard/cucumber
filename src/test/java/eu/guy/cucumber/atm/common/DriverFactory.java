@@ -6,6 +6,7 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import java.io.FileNotFoundException;
 
 // simple browser lifecycle wrapper
+// TODO turn to production-grade browser wrapper, parallel test, session reuse etc.
 public class DriverFactory {
     private static String CHROME_EXE = "chromedriver.exe";
 
@@ -13,7 +14,7 @@ public class DriverFactory {
     private static void SetupChromeDriver() {
         String filepath = null;
         try {
-            filepath = Utils.getProjectFile(CHROME_EXE).getAbsolutePath();
+            filepath = Common.getFileFromResources(CHROME_EXE).getAbsolutePath();
         } catch (FileNotFoundException e) {
             System.out.println("Error: driver executable not found");
             e.printStackTrace();

@@ -12,15 +12,17 @@ Mark classes for injection
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <!-- Bean via XML config, good for production/third party code -->
-    <bean class="eu.guy.cucumber.atm.domain.TestCashSlot" scope="cucumber-glue"/>
-    <!-- not cucumber but default spring context, singleton in essence -->
-    <bean class="eu.guy.cucumber.atm.domain.WebTeller" destroy-method="close">
+    <bean id="slot" class="eu.guy.cucumber.atm.domain.TestCashSlot"/>
+
+    <!-- not cucumber but default spring context (scope) -->
+    <bean class="eu.guy.cucumber.atm.domain.AtmGuiFactory"
+          factory-method="createGui" lazy-init="true" destroy-method="close">
         <constructor-arg>
-            <!-- nested bean -->
-            <bean class="eu.guy.cucumber.atm.common.DriverFactory"
-                  factory-method="createChromeDriver" lazy-init="true"/>
+            <!-- refer to an existing bean by id -->
+            <ref bean="slot"/>
         </constructor-arg>
     </bean>
+
     <!-- test account instance -->
     <bean class="eu.guy.cucumber.atm.domain.Account"
           scope="cucumber-glue" factory-method="createAccount">

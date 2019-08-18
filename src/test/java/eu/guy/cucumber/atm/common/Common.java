@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
-public class Utils {
+public class Common {
     public static void sleep(Integer sec) {
         try {
             Thread.sleep(sec * 1000);
@@ -25,9 +25,9 @@ public class Utils {
     Not running test will not include test-resource folder in classpath
     mvn compile does not copy test-resource folder to "target" folder in classpath
      */
-    public static File getProjectFile(String filePath) throws
+    public static File getFileFromResources(String path) throws
             FileNotFoundException {
-        URL url = Utils.class.getClassLoader().getResource(filePath);
+        URL url = Common.class.getClassLoader().getResource(path);
         if (url != null) {
             try {
                 return new File(url.toURI());
@@ -35,7 +35,7 @@ public class Utils {
                 e.printStackTrace();
             }
         }
-        throw new FileNotFoundException(filePath);
+        throw new FileNotFoundException("Filepath " + path);
     }
 
     public static String slurpFile(String filepath) throws IOException {
