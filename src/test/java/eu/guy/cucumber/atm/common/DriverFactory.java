@@ -1,6 +1,8 @@
 package eu.guy.cucumber.atm.common;
 
+import eu.guy.cucumber.atm.domain.UatException;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 import java.io.FileNotFoundException;
@@ -8,22 +10,23 @@ import java.io.FileNotFoundException;
 // simple browser lifecycle wrapper
 // TODO turn to production-grade browser wrapper, parallel test, session reuse etc.
 public class DriverFactory {
-    private static String CHROME_EXE = "chromedriver.exe";
+    private static String CHROME_BINARY = "chromedriver.exe";
 
     //    TODO suppress driver logging to console
     private static void SetupChromeDriver() {
         String filepath = null;
         try {
-            filepath = Common.getFileFromResources(CHROME_EXE).getAbsolutePath();
+            filepath = Common.getFileFromResources(
+                    "drivers\\" + CHROME_BINARY).getAbsolutePath();
         } catch (FileNotFoundException e) {
-            System.out.println("Error: driver executable not found");
-            e.printStackTrace();
+            throw new UatException("Webdriver binary not found", e);
         }
         System.setProperty("webdriver.chrome.driver", filepath);
     }
 
     public static EventFiringWebDriver createChromeDriver() {
         SetupChromeDriver();
-        return new EventFiringWebDriver(new ChromeDriver());
+        ChromeOptions opts = new ChromeOptions();
+        return new EventFiringWebDriver(new ChromeDriver(opts));
     }
 }

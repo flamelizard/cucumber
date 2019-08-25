@@ -25,9 +25,9 @@ public class Common {
     Not running test will not include test-resource folder in classpath
     mvn compile does not copy test-resource folder to "target" folder in classpath
      */
-    public static File getFileFromResources(String path) throws
+    public static File getFileFromResources(String relPath) throws
             FileNotFoundException {
-        URL url = Common.class.getClassLoader().getResource(path);
+        URL url = Common.class.getClassLoader().getResource(relPath);
         if (url != null) {
             try {
                 return new File(url.toURI());
@@ -35,7 +35,7 @@ public class Common {
                 e.printStackTrace();
             }
         }
-        throw new FileNotFoundException("Filepath " + path);
+        throw new FileNotFoundException("Filepath " + relPath);
     }
 
     public static String slurpFile(String filepath) throws IOException {
@@ -53,7 +53,10 @@ public class Common {
     }
 
     public static Path getTestResourceDir() {
-        Path root = Paths.get(System.getProperty("user.dir"));
-        return root.resolve("src/test/resources/");
+        return getProjectRoot().resolve("src/test/resources/");
+    }
+
+    public static Path getProjectRoot() {
+        return Paths.get(System.getProperty("user.dir"));
     }
 }

@@ -12,6 +12,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import java.net.InetSocketAddress;
+import java.nio.file.Path;
 
 public class ATMServer {
     //    recommended practice to embed jetty instead of running standalone
@@ -37,8 +38,8 @@ public class ATMServer {
         ContextHandler ctxHandler = new ContextHandler();
         ctxHandler.setContextPath("/");
         ResourceHandler resHandler = new ResourceHandler();
-        resHandler.setResourceBase(
-                Common.getTestResourceDir().resolve("static").toString());
+        Path staticRoot = Common.getProjectRoot().resolve("src/main/resources/static");
+        resHandler.setResourceBase(staticRoot.toString());
         ctxHandler.setHandler(resHandler);
 
 //        collection selects handler based on the longest URL match with request
@@ -47,11 +48,6 @@ public class ATMServer {
         handlers.setHandlers(new Handler[]{ctxHandler, servletHandler, new DefaultHandler()});
 
         server.setHandler(handlers);
-    }
-
-    public static void main(String[] args) throws Exception {
-        ATMServer server = new ATMServer(5000, new CashSlot());
-        server.start();
     }
 
     public void start() throws Exception {

@@ -53,10 +53,12 @@
                             <arguments>
                                 <argument>--plugin</argument>
                                 <argument>html:cucumber-report</argument>
+                                <argument>--tags</argument>
+                                <argument>~@bypass-ui</argument>
                                 <argument>--strict</argument>
                                 <argument>--glue</argument>
                                 <argument>eu.guy.cucumber.atm.step_definitions</argument>
-                                <argument>src\test\java\eu\guy\cucumber\atm\features</argument>
+                                <argument>src\test\resources\features</argument>
                             </arguments>
                         </configuration>
                     </execution>

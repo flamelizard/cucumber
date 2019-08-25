@@ -2,6 +2,7 @@
 Feature: Select tests using direct teller interface
   ATM application server is not running
 
+#  TODO failing when runs as all tests
   Scenario: Successful withdrawal from an account
     Given my account has been credited with $500
     When I withdraw $100

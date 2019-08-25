@@ -2,8 +2,7 @@
 <Configuration status="warn" name="MyApp" packages="">
 
     <Appenders>
-        <!--var from project.properties-->
-        <File name="eventLog" fileName="${bundle:project:event.log.file}" append="false">
+        <File name="eventLog" fileName="log\events.txt" append="false">
             <PatternLayout>
                 <Pattern>%d{yyyyMMddHHmmss} %-5p %c{1}:%L - %m%n</Pattern>
             </PatternLayout>
