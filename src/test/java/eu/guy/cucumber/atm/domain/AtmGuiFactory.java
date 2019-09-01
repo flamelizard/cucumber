@@ -12,7 +12,7 @@ public class AtmGuiFactory {
         if (override != null && override.toLowerCase().contains("no-gui")) {
             return new DirectTeller(slot);
         }
-        return new WebTeller(DriverFactory.createChromeDriver());
+        return new WebTeller(DriverFactory.getDriverInstance());
     }
 
     public static void bypassGui() {
