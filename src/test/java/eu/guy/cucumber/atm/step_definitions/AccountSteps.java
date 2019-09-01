@@ -1,12 +1,10 @@
 package eu.guy.cucumber.atm.step_definitions;
 
-import cucumber.api.Transform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import eu.guy.cucumber.atm.common.Common;
 import eu.guy.cucumber.atm.domain.Account;
 import eu.guy.cucumber.atm.domain.Money;
-import eu.guy.cucumber.atm.step_definitions.transforms.MoneyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -50,16 +48,14 @@ public class AccountSteps {
         assertEquals(expected, balance);
     }
 
-    @Given("^[Mm]y account has been credited with (\\$\\d+(?:\\.\\d+)?)$")
-    public void iHaveCredited$InMyAccount(
-            @Transform(MoneyConverter.class) Money money) throws Exception {
+    @Given("my account has been credited with {money}")
+    public void iHaveCredited$InMyAccount(Money money) throws Exception {
         testAccount.credit(money);
         waitForBalance(money, testAccount);
     }
 
-    @Then("^the balance of my account should be (\\$[\\d.]+)$")
-    public void theBalanceOfMyAccountShouldBe(
-            @Transform(MoneyConverter.class) Money money) {
+    @Then("the balance of my account should be {money}")
+    public void theBalanceOfMyAccountShouldBe(Money money) {
         waitForBalance(money, testAccount);
         assertEquals(money, testAccount.getBalance());
     }

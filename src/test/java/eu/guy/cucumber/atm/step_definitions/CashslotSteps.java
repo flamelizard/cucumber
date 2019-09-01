@@ -1,6 +1,5 @@
 package eu.guy.cucumber.atm.step_definitions;
 
-import cucumber.api.Transform;
 import cucumber.api.java.en.But;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -8,7 +7,6 @@ import eu.guy.cucumber.atm.domain.AtmGui;
 import eu.guy.cucumber.atm.domain.CashSlot;
 import eu.guy.cucumber.atm.domain.Money;
 import eu.guy.cucumber.atm.domain.TestCashSlot;
-import eu.guy.cucumber.atm.step_definitions.transforms.MoneyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
@@ -20,9 +18,8 @@ public class CashslotSteps {
     @Autowired
     private AtmGui teller;
 
-    @Then("^\\$([\\d.]+) should be dispensed$")
-    public void $ShouldBeDispensed(
-            @Transform(MoneyConverter.class) Money amount) throws Throwable {
+    @Then("{money} should be dispensed")
+    public void $ShouldBeDispensed(Money amount) throws Throwable {
         assertEquals(amount, slot.getContents());
     }
 
@@ -36,8 +33,8 @@ public class CashslotSteps {
         ((TestCashSlot) slot).injectFault();
     }
 
-    @Given("ATM contains (\\$[\\d.]+)")
-    public void feedATM(@Transform(MoneyConverter.class) Money funds) {
+    @Given("ATM contains {money}")
+    public void feedATM(Money funds) {
         slot.load(funds);
     }
 }
